@@ -60,7 +60,7 @@ jobs:
   # Can't test Musl because of FluentBenchmarks and SQLKitBenchmarks
   
   android-unit:
-    if: ${{ !(github.event.pull_request.draft || false) && inputs.with_android }}
+    if: ${{ !(github.event.pull_request.draft || false) }}
     strategy:
       fail-fast: false
       matrix:
