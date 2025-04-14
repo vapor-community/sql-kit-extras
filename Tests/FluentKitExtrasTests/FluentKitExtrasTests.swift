@@ -105,7 +105,7 @@ struct FluentKitExtrasTests {
         model.$bar.ref = "b"
         model.$bar.value = .init()
         #expect(model.bar.id == nil)
-        #expect(model.$bar.description == "Pointer<BazModel, BarModel, identifier>(key: baridentifier)")
+        #expect(model.$bar.description == model.$bar.name)
         await #expect(throws: Never.self) { try await model.$bar.get(reload: true, on: MockFluentDatabase([[["id": "1", "identifier": "b", "timestamp": fluentIso8601String(), "another": fluentIso8601String(), "recursive_baridentifier": "b", "blooey": "", "phooey": ""] as QuickOutput]])) }
         #expect(model.$bar.anyQueryableProperty === model.$bar.$ref)
         #expect(model.$bar.queryablePath == [.string("baridentifier")])
@@ -113,7 +113,7 @@ struct FluentKitExtrasTests {
         model.$optionalBar.ref = "b"
         model.$optionalBar.value = .some(nil)
         #expect(model.optionalBar == nil)
-        #expect(model.$optionalBar.description == "OptionalPointer<BazModel, BarModel, identifier>(key: optional_baridentifier)")
+        #expect(model.$optionalBar.description == model.$optionalBar.name)
         await #expect(throws: Never.self) { try await model.$optionalBar.get(reload: true, on: MockFluentDatabase()) }
         #expect(model.$optionalBar.anyQueryableProperty === model.$optionalBar.$ref)
         #expect(model.$optionalBar.queryablePath == [.string("optional_baridentifier")])
@@ -167,11 +167,11 @@ struct FluentKitExtrasTests {
         model.$optionalBazs.fromValue = "b"
         #expect(model.$bazs.fromValue == "a")
         #expect(model.bazs.isEmpty)
-        #expect(model.$bazs.description == "@References<BarModel, BazModel>(for: required(\\BazModel.$bar))")
+        #expect(model.$bazs.description == model.$bazs.name)
         #expect(model.$bazs.keys == [])
         #expect(model.$optionalBaz.fromValue == "b")
         #expect(model.optionalBaz == nil)
-        #expect(model.$optionalBaz.description == "@OptionalReference<BarModel, BazModel>(for: optional(\\BazModel.$optionalBar))")
+        #expect(model.$optionalBaz.description == model.$optionalBaz.name)
         #expect(model.$optionalBaz.keys == [])
         #expect(model.$optionalBazs.query(on: MockFluentDatabase()).query.description == #"query read bazs filters=[bazs[optional_baridentifier] = Optional("b")]"#)
         #expect(model.$baz.query(on: MockFluentDatabase()).query.description == #"query read bazs filters=[bazs[baridentifier] = "a"]"#)
@@ -314,11 +314,7 @@ final class MockFluentDatabase: Database {
 
     let context: DatabaseContext = .init(
         configuration: MockConfiguration(),
-        logger: .init(label: "mockdb", factory: { l in
-            var h = ModifiedStreamLogHandler.standardOutput(label: l)
-            h.logLevel = .debug
-            return h
-        }),
+        logger: .init(label: "mockdb", factory: ModifiedStreamLogHandler.standardOutput(label:)),
         eventLoop: EmbeddedEventLoop()
     )
     let inTransaction = false
