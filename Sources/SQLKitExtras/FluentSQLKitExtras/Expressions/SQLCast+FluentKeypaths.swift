@@ -20,6 +20,5 @@ extension SQLExpression {
     ) -> Self where Self == SQLCastExpression {
         .cast(.column(column), to: type)
     }
-
 }
 #endif

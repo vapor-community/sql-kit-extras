@@ -8,17 +8,17 @@ public struct SQLCastExpression: SQLExpression {
     /// The desired type to cast the original expression to.
     public let desiredType: any SQLExpression
 
-    /// Create a new ``SQLCast``.
+    /// Create a new ``SQLCastExpression``.
     ///
     /// - Parameters:
     ///   - original: The original expression to be cast.
     ///   - desiredType: The desired type to cast the original expression to.
-    public init(expr: some SQLExpression, castType: any SQLExpression) {
+    public init(expr: some SQLExpression, castType: some SQLExpression) {
         self.original = expr
         self.desiredType = castType
     }
 
-    /// Convenience initializer for creating a ``SQLCast`` with a string for the original expression and a string for the desired type.
+    /// Convenience initializer for creating a ``SQLCastExpression`` with a string for the original expression and a string for the desired type.
     ///
     /// - Parameters:
     ///   - original: The original expression to be cast.
@@ -29,10 +29,8 @@ public struct SQLCastExpression: SQLExpression {
 
     /// See `SQLExpression.serialize(to:)`.
     public func serialize(to serializer: inout SQLSerializer) {
-        serializer.statement {
-            $0.append("CAST(", self.original)
-            $0.append("AS", self.desiredType, ")")
-        }
+        SQLFunction("CAST", args: SQLAlias(self.original, as: self.desiredType))
+            .serialize(to: &serializer)
     }
 }
 
