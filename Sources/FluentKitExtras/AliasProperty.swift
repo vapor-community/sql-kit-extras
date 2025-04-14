@@ -1,4 +1,5 @@
 import FluentKit
+import Foundation
 
 // MARK: - "Can be aliased" property capability
 
