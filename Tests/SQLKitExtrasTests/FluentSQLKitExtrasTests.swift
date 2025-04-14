@@ -295,6 +295,12 @@ struct FluentSQLKitExtrasTests {
             #expect(serialize(.expr(.not, \FooModel.$field)) == #"NOT "foos"."field""#)
             #expect(serialize(.not(\FooModel.$field)) == #"NOT "foos"."field""#)
         }
+
+        @Test
+        func castExpression() {
+            #expect(serialize(.cast(\FooModel.$field, to: "text")) == #"CAST("foos"."field" AS "text")"#)
+            #expect(serialize(.cast(\FooModel.$field, to: .unsafeRaw("text"))) == #"CAST("foos"."field" AS text)"#)
+        }
     }
 }
 
