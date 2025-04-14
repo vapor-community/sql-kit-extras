@@ -1,3 +1,4 @@
+<p align="center"><img src="https://github.com/user-attachments/assets/490fa1c8-6b28-44f4-948b-9a166ee600af" width="192" height="192"></p>
 <h1 align="center">sql-kit-extras</h1>
 <p align="center">
 <a href="https://discord.gg/vapor"><img src="https://design.vapor.codes/images/discordchat.svg" alt="Vapor Chat"></a>
