@@ -12,7 +12,7 @@ A set of utilities intended to improve the usefulness of SQLKit 3 (and, nominall
 
 The documentation comments (viewable most easily in Xcode) and the notes in this README are currently the extent of the documentation.
 
-This is not an official Vapor project; it's something that @gwynne does on her own time.
+This is not an official Vapor project; it's something that [@gwynne](https://github.com/gwynne) does on her own time.
 
 ## Things **NOT** to expect
 
