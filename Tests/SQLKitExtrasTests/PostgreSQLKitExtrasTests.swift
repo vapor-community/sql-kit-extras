@@ -26,16 +26,6 @@ struct PostgreSQLKitExtrasTests {
     }
 
     @Test
-    func castExpression() {
-        #expect(serialize(PostgreSQLCast(.column("foo"), as: "text")) == #""foo"::"text""#)
-        #expect(serialize(PostgreSQLCast(expr: .column("foo"), castType: .unsafeRaw("text"))) == #""foo"::text"#)
-
-        #expect(serialize(.psql_cast("foo", to: "text")) == #""foo"::"text""#)
-        #expect(serialize(.psql_cast(.column("foo"), to: "text")) == #""foo"::"text""#)
-        #expect(serialize(.psql_cast(.column("foo"), to: .unsafeRaw("text"))) == #""foo"::text"#)
-    }
-
-    @Test
     func setQuery() {
         #expect(serialize(PostgreSQLSetQuery(name: .identifier("foo.bar"), value: .literal("baz"))) == #"SET "foo.bar" = 'baz'"#)
         #expect(serialize(MockSQLDatabase().psql_set("foo.bar", to: "baz")) == #"SET "foo.bar" = 'baz'"#)
@@ -59,12 +49,6 @@ struct PostgreSQLKitExtrasTests {
             #expect(serialize(.psql_subscript(\FooModel.$field, at: \FooModel.$id)) == #""foos"."field"["foos"."id"]"#)
             #expect(serialize(.psql_subscript(\FooModel.$field, at: .literal(0))) == #""foos"."field"[0]"#)
             #expect(serialize(.psql_subscript(.identifier("foo"), at: \FooModel.$id)) == #""foo"["foos"."id"]"#)
-        }
-
-        @Test
-        func castExpression() {
-            #expect(serialize(.psql_cast(\FooModel.$field, to: "text")) == #""foos"."field"::"text""#)
-            #expect(serialize(.psql_cast(\FooModel.$field, to: .unsafeRaw("text"))) == #""foos"."field"::text"#)
         }
     }
     #endif

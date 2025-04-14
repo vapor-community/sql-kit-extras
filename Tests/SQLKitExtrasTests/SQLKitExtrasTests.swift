@@ -252,6 +252,16 @@ struct SQLKitExtrasTests {
         }
 
         @Test
+        func castExpression() {
+            #expect(serialize(SQLCastExpression(.column("foo"), to: "text")) == #"CAST( "foo" AS "text" )"#)
+            #expect(serialize(SQLCastExpression(expr: .column("foo"), castType: .unsafeRaw("text"))) == #"CAST( "foo" AS text )"#)
+
+            #expect(serialize(.cast("foo", to: "text")) == #"CAST( "foo" AS "text" )"#)
+            #expect(serialize(.cast(.column("foo"), to: "text")) == #"CAST( "foo" AS "text" )"#)
+            #expect(serialize(.cast(.column("foo"), to: .unsafeRaw("text"))) == #"CAST( "foo" AS text )"#)
+        }
+
+        @Test
         func currentTimestampExpression() {
             #expect(serialize(SQLCurrentTimestampExpression()) == #"current_timestamp()"#)
             #expect(MockSQLDatabase(dialect: "sqlite").serialize(SQLCurrentTimestampExpression()).sql == #"unixepoch()"#)
