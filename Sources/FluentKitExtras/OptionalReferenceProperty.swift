@@ -179,7 +179,7 @@ extension OptionalReferenceProperty: AnyCodableProperty {
 
 extension OptionalReferenceProperty: Relation {
     public var name: String {
-        "OptionalReference<\(From.self), \(To.self)>(for: \(self.parentKey))"
+        "@OptionalReference<\(From.self), \(To.self)>(for: \(self.parentKey))"
     }
 
     public func load(on database: any Database) -> EventLoopFuture<Void> {

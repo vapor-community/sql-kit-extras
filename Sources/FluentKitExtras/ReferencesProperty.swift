@@ -193,7 +193,7 @@ extension ReferencesProperty: AnyCodableProperty {
 
 extension ReferencesProperty: Relation {
     public var name: String {
-        "References<\(From.self), \(To.self)>(for: \(self.parentKey))"
+        "@References<\(From.self), \(To.self)>(for: \(self.parentKey))"
     }
 
     public func load(on database: any Database) -> EventLoopFuture<Void> {
