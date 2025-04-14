@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     container: ${{ matrix.swift }}
     steps:
+      - name: Ensure curl is available
+        run: apt-get update -y && apt-get install -y curl
       - name: Check out code
         uses: actions/checkout@v4
       - name: Run unit tests
