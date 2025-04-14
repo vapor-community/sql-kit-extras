@@ -1,0 +1,76 @@
+name: test
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+on:
+  pull_request: { types: [opened, reopened, synchronize, ready_for_review] }
+  push: { branches: [ main ] }
+
+jobs:
+  linux-unit:
+    if: ${{ !(github.event.pull_request.draft || false) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        swift:
+          - swift:6.0-noble
+          - swift:6.1-noble
+    runs-on: ubuntu-latest
+    container: ${{ matrix.swift }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run unit tests
+        env:
+          TRAITS_FLAG: ${{ matrix.swift == 'swift:6.1-noble' && '--enable-all-traits' || '' }}
+        run: |
+          swift test --enable-code-coverage -Xswiftc -warnings-as-errors ${TRAITS_FLAG}
+      - name: Upload coverage data
+        uses: vapor/swift-codecov-action@v0.3
+        with:
+          codecov_token: ${{ secrets.CODECOV_TOKEN || '' }}
+
+  macos-unit:
+    if: ${{ !(github.event.pull_request.draft || false) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - macos-version: macos-15
+            xcode-version: latest-stable
+    runs-on: ${{ matrix.macos-version }}
+    steps:
+      - name: Select appropriate Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode-version }}
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run unit tests
+        run: |
+          swift test --enable-code-coverage -Xswiftc -warnings-as-errors --enable-all-traits
+      - name: Upload coverage data
+        uses: vapor/swift-codecov-action@v0.3
+        with:
+          codecov_token: ${{ secrets.CODECOV_TOKEN || '' }}
+
+  # Can't test on Windows, uses NIO
+  # Can't test Musl because of FluentBenchmarks and SQLKitBenchmarks
+  
+  android-unit:
+    if: ${{ !(github.event.pull_request.draft || false) && inputs.with_android }}
+    strategy:
+      fail-fast: false
+      matrix:
+        swift-version:
+          - 6.1
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run unit tests
+        uses: skiptools/swift-android-action@v2
+        with:
+          swift-version: ${{ matrix.swift-version }}
+          swift-test-flags: --enable-all-traits
