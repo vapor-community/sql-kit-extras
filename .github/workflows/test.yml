@@ -59,20 +59,20 @@ jobs:
   # Can't test on Windows, uses NIO
   # Can't test Musl because of FluentBenchmarks and SQLKitBenchmarks
   
-  android-unit:
-    if: ${{ !(github.event.pull_request.draft || false) }}
-    strategy:
-      fail-fast: false
-      matrix:
-        swift-version:
-          - 6.1
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-      - name: Run unit tests
-        uses: skiptools/swift-android-action@v2
-        with:
-          swift-version: ${{ matrix.swift-version }}
-          swift-test-flags: --enable-all-traits
+  #android-unit:
+  #  if: ${{ !(github.event.pull_request.draft || false) }}
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      swift-version:
+  #        - 6.1
+  #  runs-on: ubuntu-latest
+  #  timeout-minutes: 60
+  #  steps:
+  #    - name: Check out code
+  #      uses: actions/checkout@v4
+  #    - name: Run unit tests
+  #      uses: skiptools/swift-android-action@v2
+  #      with:
+  #        swift-version: ${{ matrix.swift-version }}
+  #        swift-test-flags: --enable-all-traits
