@@ -27,8 +27,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.0"),
-        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.51.0"),
-        .package(url: "https://github.com/vapor/sql-kit.git", from: "3.32.0"),
+        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.52.0"),
+        .package(url: "https://github.com/vapor/sql-kit.git", from: "3.33.0"),
     ],
     targets: [
         .target(
