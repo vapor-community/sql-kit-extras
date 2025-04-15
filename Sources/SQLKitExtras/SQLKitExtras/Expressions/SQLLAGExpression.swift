@@ -19,7 +19,7 @@ public struct SQLLAGExpression: SQLExpression {
     public init(
         value: some SQLExpression,
         offset: some SQLExpression,
-        defaultValue: (some SQLExpression)? = nil
+        defaultValue: (some SQLExpression)? = SQLRaw?.none
     ) {
         self.value = value
         self.offset = offset

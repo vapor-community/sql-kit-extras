@@ -289,5 +289,15 @@ struct SQLKitExtrasTests {
             #expect(serialize(.expr(.negate, .literal(1))) == "- 1")
             #expect(serialize(.not(.literal(false))) == "NOT false")
         }
+
+        @Test 
+        func lagExpression() {
+            #expect(serialize(SQLLAGExpression(value: .column("foo"), offset: .literal(1))) == #"LAG("foo") OVER (ORDER BY 1)"#)
+            #expect(serialize(SQLLAGExpression(value: .column("foo"), offset: .literal(1), defaultValue: SQLLiteral.literal(0))) == #"LAG("foo") OVER (ORDER BY 1) DEFAULT 0"#)
+
+            #expect(serialize(.lag(.column("foo"), offset: .literal(1))) == #"LAG("foo") OVER (ORDER BY 1)"#)
+            #expect(serialize(.lag(.column("foo"), offset: .literal(1), defaultValue: SQLLiteral.literal(0))) == #"LAG("foo") OVER (ORDER BY 1) DEFAULT 0"#)
+            #expect(serialize(.lag(.column("foo"), offset: .literal(1), defaultValue: SQLRaw.unsafeRaw("bar"))) == #"LAG("foo") OVER (ORDER BY 1) DEFAULT bar"#)
+        }
     }
 }
