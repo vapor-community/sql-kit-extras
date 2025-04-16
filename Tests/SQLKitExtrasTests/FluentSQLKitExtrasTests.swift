@@ -301,6 +301,18 @@ struct FluentSQLKitExtrasTests {
             #expect(serialize(.cast(\FooModel.$field, to: "text")) == #"CAST("foos"."field" AS "text")"#)
             #expect(serialize(.cast(\FooModel.$field, to: .unsafeRaw("text"))) == #"CAST("foos"."field" AS text)"#)
         }
+        
+        @Test
+        func lagExpression() {
+            #expect(serialize(.lag(\FooModel.$field, offset: .literal(1))) == #"LAG("foos"."field") OVER (ORDER BY 1)"#)
+            #expect(serialize(.lag(\FooModel.$field, offset: .literal(1), defaultValue: SQLLiteral.literal(0))) == #"LAG("foos"."field") OVER (ORDER BY 1) DEFAULT 0"#)
+            
+            #expect(serialize(.lag(\FooModel.$field, offset: \FooModel.$id)) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id")"#)
+            #expect(serialize(.lag(\FooModel.$field, offset: \FooModel.$id, defaultValue: SQLLiteral.literal(0))) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id") DEFAULT 0"#)
+            
+            #expect(serialize(.lag(.column("field", table: "foos"), offset: \FooModel.$id)) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id")"#)
+            #expect(serialize(.lag(.column("field", table: "foos"), offset: \FooModel.$id, defaultValue: SQLLiteral.literal(0))) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id") DEFAULT 0"#)
+        }
     }
 }
 
