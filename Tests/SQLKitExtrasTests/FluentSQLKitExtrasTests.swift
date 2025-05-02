@@ -164,6 +164,8 @@ struct FluentSQLKitExtrasTests {
         @Test
         func insertBuilderExtensions() {
             #expect(serialize(MockSQLDatabase().insert(into: FooModel.self).columns(\FooModel.$field, \FooModel.$parent)) == #"INSERT INTO "foos" ("field", "parent_id")"#)
+            #expect(serialize(MockSQLDatabase().insert(into: FooModel.self).ignoringConflicts(with: \FooModel.$field)) == #"INSERT INTO "foos" () ON CONFLICT ("field") DO NOTHING"#)
+            #expect(serialize(MockSQLDatabase().insert(into: FooModel.self).onConflict(with: \FooModel.$field, do: { $0 })) == #"INSERT INTO "foos" () ON CONFLICT ("field") DO UPDATE SET"#)
         }
 
         @Test

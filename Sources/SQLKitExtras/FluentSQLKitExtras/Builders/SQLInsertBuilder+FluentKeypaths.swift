@@ -18,6 +18,29 @@ extension SQLInsertBuilder {
         }
         return self
     }
+
+    /// Allow specifying a column or columns for ignoring insert conflicts using Fluent model keypaths.
+    @discardableResult
+    public func ignoringConflicts<each F: Fields, each P: QueryAddressableProperty>(with keypaths: repeat KeyPath<each F, each P>) -> Self {
+        var identifiers: [SQLIdentifier] = []
+        for keypath in repeat each keypaths {
+            identifiers.append(.identifier(keypath))
+        }
+        return self.ignoringConflicts(with: identifiers)
+    }
+
+    /// Allow specifying a column or columns for resolving insert conflicts using Fluent model keypaths.
+    @discardableResult
+    public func onConflict<each F: Fields, each P: QueryAddressableProperty>(
+        with keypaths: repeat KeyPath<each F, each P>,
+        `do` updatePredicate: (SQLConflictUpdateBuilder) throws -> SQLConflictUpdateBuilder
+    ) rethrows -> Self {
+        var identifiers: [SQLIdentifier] = []
+        for keypath in repeat each keypaths {
+            identifiers.append(.identifier(keypath))
+        }
+        return try self.onConflict(with: identifiers, do: updatePredicate)
+    }
 }
 
 extension SQLDatabase {
