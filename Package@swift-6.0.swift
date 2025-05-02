@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "sql-kit-extras",
     platforms: [
-        .macOS(.v13),
+        .macOS(.v10_15),
     ],
     products: [
         .library(name: "SQLKitExtras", targets: ["SQLKitExtras"]),
