@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SQLKitExtras",
+    name: "sql-kit-extras",
     platforms: [
         .macOS(.v13),
     ],
