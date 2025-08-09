@@ -301,7 +301,13 @@ struct FluentSQLKitExtrasTests {
         @Test
         func castExpression() {
             #expect(serialize(.cast(\FooModel.$field, to: "text")) == #"CAST("foos"."field" AS "text")"#)
-            #expect(serialize(.cast(\FooModel.$field, to: .unsafeRaw("text"))) == #"CAST("foos"."field" AS text)"#)
+            
+            let mysqlDB = MockSQLDatabase(dialect: "mysql")
+            let castExpr: any SQLExpression = .cast(\FooModel.$field, to: "text")
+            #expect(mysqlDB.serialize(castExpr).sql == #"CAST("foos"."field" AS text)"#)
+            
+            let postgresDB = MockSQLDatabase(dialect: "postgresql")
+            #expect(postgresDB.serialize(castExpr).sql == #"CAST("foos"."field" AS "text")"#)
         }
     }
 }
