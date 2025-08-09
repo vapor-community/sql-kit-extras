@@ -7,7 +7,7 @@ extension SQLExpression {
     /// for the desired type.
     public static func cast(
         _ column: KeyPath<some Schema, some QueryAddressableProperty>,
-        to type: String
+        to type: some StringProtocol
     ) -> Self where Self == SQLCastExpression {
         .cast(.column(column), to: type)
     }

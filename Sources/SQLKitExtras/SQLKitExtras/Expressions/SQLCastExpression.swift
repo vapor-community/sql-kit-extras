@@ -33,7 +33,7 @@ public struct SQLCastExpression: SQLExpression {
             serializer.dialect.name == "mysql",
             let ident = self.desiredType as? SQLIdentifier,
             ident.string.allSatisfy({ $0.isASCII && ($0.isLowercase || $0.isUppercase || $0.isWholeNumber || $0 == "_") })
-         {
+        {
             SQLRaw(ident.string)
         } else {
             self.desiredType
@@ -50,7 +50,7 @@ extension SQLExpression {
         _ column: some StringProtocol,
         to type: some StringProtocol
     ) -> Self where Self == SQLCastExpression {
-        .cast(.column(column), to: type)
+        .cast(.column(column), to: .identifier(type))
     }
 
     /// Convenience method for creating a ``SQLCastExpression`` using a column name and a string for the desired type.
@@ -58,7 +58,7 @@ extension SQLExpression {
         _ column: some SQLExpression,
         to type: some StringProtocol
     ) -> Self where Self == SQLCastExpression {
-        .init(column, to: type)
+        .cast(column, to: .identifier(type))
     }
 
     /// Convenience method for creating a ``SQLCastExpression`` using a column name and an expression for the desired type.
