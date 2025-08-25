@@ -46,7 +46,7 @@ extension SQLJoinBuilder {
         method: SQLJoinMethod = .inner,
         on expression: some SQLExpression
     ) -> Self {
-        if let alias = alias.map(String.init(_:)) ?? type.alias {
+        if let alias = alias.map({ String($0) }) ?? type.alias {
             self.join(.table(type.schema, space: type.space), as: alias, method: method, on: expression)
         } else {
             self.join(.table(type.schema, space: type.space), method: method, on: expression)
@@ -76,7 +76,7 @@ extension SQLJoinBuilder {
         method: SQLJoinMethod = .inner,
         using columns: some Sequence<any SQLExpression>
     ) -> Self {
-        if let alias = alias.map(String.init(_:)) ?? type.alias {
+        if let alias = alias.map({ String($0) }) ?? type.alias {
             self.join(.table(type.schema, space: type.space), as: alias, method: method, using: columns)
         } else {
             self.join(.table(type.schema, space: type.space), method: method, using: .list(columns))
