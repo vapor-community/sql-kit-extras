@@ -6,7 +6,7 @@ extension SQLExpression {
         _ name: some StringProtocol,
         table: (some StringProtocol)? = String?.none
     ) -> Self where Self == SQLColumn {
-        .init(String(name), table: table.map(String.init(_:)))
+        .init(String(name), table: table.map { String($0) })
     }
 
     /// A convenience method for creating an `SQLColumn` from a column name and table expression.

@@ -21,7 +21,7 @@ jobs:
       - name: Ensure curl is available
         run: apt-get update -y && apt-get install -y curl
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run unit tests
         env:
           TRAITS_FLAG: ${{ matrix.swift == 'swift:6.1-noble' && '--enable-all-traits' || '' }}
@@ -47,7 +47,7 @@ jobs:
         with:
           xcode-version: ${{ matrix.xcode-version }}
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run unit tests
         run: |
           swift test --enable-code-coverage -Xswiftc -warnings-as-errors --enable-all-traits

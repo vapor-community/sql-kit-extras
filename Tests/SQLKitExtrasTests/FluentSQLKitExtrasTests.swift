@@ -306,6 +306,12 @@ struct FluentSQLKitExtrasTests {
             #expect(MockSQLDatabase(dialect: "mysql").serialize(.cast(\FooModel.$field, to: "text")).sql == #"CAST("foos"."field" AS text)"#)
             #expect(MockSQLDatabase(dialect: "postgresql").serialize(.cast(\FooModel.$field, to: "text")).sql == #"CAST("foos"."field" AS "text")"#)
         }
+
+        @Test
+        func queryStringExpression() {
+            #expect(serialize("foo \(ident: \FooModel.$field) bar" as SQLQueryString) == #"foo "field" bar"#)
+            #expect(serialize("foo \(col: \FooModel.$field) bar" as SQLQueryString) == #"foo "foos"."field" bar"#)
+        }
     }
 }
 
