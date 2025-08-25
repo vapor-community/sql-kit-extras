@@ -29,7 +29,17 @@ public struct SQLCastExpression: SQLExpression {
 
     /// See `SQLExpression.serialize(to:)`.
     public func serialize(to serializer: inout SQLSerializer) {
-        SQLFunction("CAST", args: SQLAlias(self.original, as: self.desiredType))
+        let desiredType: any SQLExpression = if 
+            serializer.dialect.name == "mysql",
+            let ident = self.desiredType as? SQLIdentifier,
+            ident.string.allSatisfy({ $0.isASCII && ($0.isLowercase || $0.isUppercase || $0.isWholeNumber || $0 == "_") })
+        {
+            SQLRaw(ident.string)
+        } else {
+            self.desiredType
+        }
+
+        SQLFunction("CAST", args: SQLAlias(self.original, as: desiredType))
             .serialize(to: &serializer)
     }
 }
