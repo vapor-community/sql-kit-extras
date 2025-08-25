@@ -258,11 +258,8 @@ struct SQLKitExtrasTests {
             #expect(serialize(.cast("foo", to: "text")) == #"CAST("foo" AS "text")"#)
             #expect(serialize(.cast(.column("foo"), to: "text")) == #"CAST("foo" AS "text")"#)
 
-            let mysqlDB = MockSQLDatabase(dialect: "mysql")
-            #expect(mysqlDB.serialize(SQLCastExpression(.column("foo"), to: "text")).sql == #"CAST("foo" AS text)"#)
-
-            let postgresDB = MockSQLDatabase(dialect: "postgresql")
-            #expect(postgresDB.serialize(SQLCastExpression(.column("foo"), to: "text")).sql == #"CAST("foo" AS "text")"#)
+            #expect(MockSQLDatabase(dialect: "mysql").serialize(SQLCastExpression(.column("foo"), to: "text")).sql == #"CAST("foo" AS text)"#)
+            #expect(MockSQLDatabase(dialect: "postgresql").serialize(SQLCastExpression(.column("foo"), to: "text")).sql == #"CAST("foo" AS "text")"#)
         }
 
         @Test
