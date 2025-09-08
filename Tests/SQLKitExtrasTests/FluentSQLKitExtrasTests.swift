@@ -312,6 +312,18 @@ struct FluentSQLKitExtrasTests {
             #expect(serialize("foo \(ident: \FooModel.$field) bar" as SQLQueryString) == #"foo "field" bar"#)
             #expect(serialize("foo \(col: \FooModel.$field) bar" as SQLQueryString) == #"foo "foos"."field" bar"#)
         }
+        
+        @Test
+        func lagExpression() {
+            #expect(serialize(.lag(\FooModel.$field, offset: .literal(1))) == #"LAG("foos"."field") OVER (ORDER BY 1)"#)
+            #expect(serialize(.lag(\FooModel.$field, offset: .literal(1), defaultValue: SQLLiteral.literal(0))) == #"LAG("foos"."field") OVER (ORDER BY 1) DEFAULT 0"#)
+            
+            #expect(serialize(.lag(\FooModel.$field, offset: \FooModel.$id)) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id")"#)
+            #expect(serialize(.lag(\FooModel.$field, offset: \FooModel.$id, defaultValue: SQLLiteral.literal(0))) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id") DEFAULT 0"#)
+            
+            #expect(serialize(.lag(.column("field", table: "foos"), offset: \FooModel.$id)) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id")"#)
+            #expect(serialize(.lag(.column("field", table: "foos"), offset: \FooModel.$id, defaultValue: SQLLiteral.literal(0))) == #"LAG("foos"."field") OVER (ORDER BY "foos"."id") DEFAULT 0"#)
+        }
     }
 }
 
