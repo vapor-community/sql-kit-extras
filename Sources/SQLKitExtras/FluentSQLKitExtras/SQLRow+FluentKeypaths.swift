@@ -57,5 +57,44 @@ extension SQLRow {
     ) throws -> (repeat (each P).QueryablePropertyType.Value) {
         (repeat try self.decode(column: each keypaths))
     }
+
+    /// For each keypath in an arbitrary list of Fluent model keypaths, decode the appropriate column from the
+    /// `SQLRow`, returning the combined results as a tuple where the types of each item of the tuple are inferred
+    /// from the property referenced by the corresponding keypath. This is identical to
+    /// ``decode<each Schema, each QueryAddressableProperty>(decodingColumns: repeat...)``, except that on that method,
+    /// each KeyPath can refer to a different Schema,forcing the caller to specify the root type on all of them. However,
+    /// it is a very common use case to specify many keypaths from the same model in a row, e.g.,
+    /// `.decode(columns: \MyModel.$foo, \MyModel.$bar, \MyModel.$baz, \MyModel.$bam)`. This quickly becomes quite
+    /// tedious. By contrast, this method accepts only a single `Schema` type, and all KeyPaths are assumed to refer to
+    /// it, allowing the previous example to be written as `.decode(columnsOf: MyModel.self, \.$bar, \.$baz, \.$bam)`.
+    ///
+    /// Example:
+    ///
+    /// ```swift
+    /// final class MyModel: FluentKit.Model, @unchecked Sendable {
+    ///     @ID(custom: .id) var id: Int?
+    ///     @Field(key: "field1") var field1: String
+    ///     @Parent(key: "parent_id") var parent: ParentModel
+    ///     @Enum(key: "field2") var field2: SomeEnum
+    ///     init() {}
+    /// }
+    ///
+    /// let rows = try await sqlDatabase.select()
+    ///     .columns(\MyModel.$id, \MyModel.$field1, \MyModel.$parent, \MyModel.$field2)
+    ///     .from(MyModel.self)
+    ///     .all()
+    ///
+    /// for row in rows {
+    ///     let tuple/*(id, field1, parentId, field2)*/ = try row.decode(columns:
+    ///         \MyModel.$id, \MyModel$field1, \MyModel.$parent, \MyModel.$field2
+    ///     )
+    ///     // type(of: tuple) == (Int, String, ParentModel.IDValue, SomeEnum).self
+    /// }
+    /// ```
+    public func decode<S: Schema, each P: QueryAddressableProperty>(
+        columnsOf: S.Type, _ keypaths: repeat KeyPath<S, each P>
+    ) throws -> (repeat (each P).QueryablePropertyType.Value) {
+        (repeat try self.decode(column: each keypaths))
+    }
 }
 #endif
