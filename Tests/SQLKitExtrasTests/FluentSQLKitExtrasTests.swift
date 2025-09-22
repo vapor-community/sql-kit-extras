@@ -81,6 +81,7 @@ struct FluentSQLKitExtrasTests {
             #expect(throws: Never.self) { () throws in #expect(try ([:] as ThinSQLRow).decodeNil(column: \FooModel.$id)) }
             #expect(throws: Never.self) { () throws in #expect(try (["field": "foo"] as ThinSQLRow).decode(column: \FooModel.$field) == "foo") }
             #expect(throws: Never.self) { () throws in #expect(try (["field": "", "parent_id": 1] as ThinSQLRow).decode(columns: \FooModel.$field, \FooModel.$parent) == ("", 1)) }
+            #expect(throws: Never.self) { () throws in #expect(try (["field": "", "parent_id": 1] as ThinSQLRow).decode(columnsOf: FooModel.self, \.$field, \.$parent) == ("", 1)) }
         }
 
         @Test
@@ -92,12 +93,19 @@ struct FluentSQLKitExtrasTests {
                 #expect(try await MockSQLDatabase(resultSet: [["field": "a", "parent_id": 1]]).select()
                     .first(decodingColumns: \FooModel.$field, \FooModel.$parent) ?? ("", 0) == ("a", 1))
             }
+            await #expect(throws: Never.self) { () async throws in
+                #expect(try await MockSQLDatabase(resultSet: [["field": "a", "parent_id": 1]]).select()
+                    .first(decodingColumnsOf: FooModel.self, \.$field, \.$parent) ?? ("", 0) == ("a", 1))
+            }
 
             await #expect(throws: Never.self) { () async throws in
                 #expect(try await MockSQLDatabase(resultSet: [["field": "a"], ["field": "b"]]).select().all(decodingColumn: \FooModel.$field) == ["a", "b"])
             }
             await #expect(throws: Never.self) { () async throws in
                 #expect(try await MockSQLDatabase(resultSet: [["field": "a"], ["field": "b"]]).select().all(decodingColumns: \FooModel.$field) == ["a", "b"])
+            }
+            await #expect(throws: Never.self) { () async throws in
+                #expect(try await MockSQLDatabase(resultSet: [["field": "a"], ["field": "b"]]).select().all(decodingColumnsOf: FooModel.self, \.$field) == ["a", "b"])
             }
         }
     }
@@ -164,6 +172,7 @@ struct FluentSQLKitExtrasTests {
         @Test
         func insertBuilderExtensions() {
             #expect(serialize(MockSQLDatabase().insert(into: FooModel.self).columns(\FooModel.$field, \FooModel.$parent)) == #"INSERT INTO "foos" ("field", "parent_id")"#)
+            #expect(serialize(MockSQLDatabase().insert(into: FooModel.self).columns(of: FooModel.self, \.$field, \.$parent)) == #"INSERT INTO "foos" ("field", "parent_id")"#)
             #expect(serialize(MockSQLDatabase().insert(into: FooModel.self).ignoringConflicts(with: \FooModel.$field)) == #"INSERT INTO "foos" () ON CONFLICT ("field") DO NOTHING"#)
             #expect(serialize(MockSQLDatabase().insert(into: FooModel.self).onConflict(with: \FooModel.$field, do: { $0 })) == #"INSERT INTO "foos" () ON CONFLICT ("field") DO UPDATE SET"#)
         }
@@ -251,6 +260,7 @@ struct FluentSQLKitExtrasTests {
         func unqualifiedColumnListBuilderExtensions() {
             #expect(serialize(selectBuilder().column(\FooModel.$field)) == #"SELECT "foos"."field""#)
             #expect(serialize(selectBuilder().columns(\FooModel.$field, \FooModel.$id)) == #"SELECT "foos"."field", "foos"."id""#)
+            #expect(serialize(selectBuilder().columns(of: FooModel.self, \.$field, \.$id)) == #"SELECT "foos"."field", "foos"."id""#)
         }
 
         @Test

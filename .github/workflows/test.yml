@@ -15,6 +15,7 @@ jobs:
         swift:
           - swift:6.0-noble
           - swift:6.1-noble
+          - swift:6.2-noble
     runs-on: ubuntu-latest
     container: ${{ matrix.swift }}
     steps:
@@ -24,9 +25,9 @@ jobs:
         uses: actions/checkout@v5
       - name: Run unit tests
         env:
-          TRAITS_FLAG: ${{ matrix.swift == 'swift:6.1-noble' && '--enable-all-traits' || '' }}
+          TRAITS_FLAG: ${{ matrix.swift != 'swift:6.0-noble' && '--enable-all-traits' || '' }}
         run: |
-          swift test --enable-code-coverage -Xswiftc -warnings-as-errors ${TRAITS_FLAG}
+          swift test --enable-code-coverage --explicit-target-dependency-import-check error -Xswiftc -require-explicit-sendable -Xswiftc -warnings-as-errors ${TRAITS_FLAG}
       - name: Upload coverage data
         uses: vapor/swift-codecov-action@v0.3
         with:
@@ -40,6 +41,8 @@ jobs:
         include:
           - macos-version: macos-15
             xcode-version: latest-stable
+          - macos-version: macos-26
+            xcode-version: latest-stable
     runs-on: ${{ matrix.macos-version }}
     steps:
       - name: Select appropriate Xcode version
@@ -50,7 +53,7 @@ jobs:
         uses: actions/checkout@v5
       - name: Run unit tests
         run: |
-          swift test --enable-code-coverage -Xswiftc -warnings-as-errors --enable-all-traits
+          swift test --enable-code-coverage --explicit-target-dependency-import-check error -Xswiftc -require-explicit-sendable -Xswiftc -warnings-as-errors --enable-all-traits
       - name: Upload coverage data
         uses: vapor/swift-codecov-action@v0.3
         with:
@@ -58,21 +61,3 @@ jobs:
 
   # Can't test on Windows, uses NIO
   # Can't test Musl because of FluentBenchmarks and SQLKitBenchmarks
-  
-  #android-unit:
-  #  if: ${{ !(github.event.pull_request.draft || false) }}
-  #  strategy:
-  #    fail-fast: false
-  #    matrix:
-  #      swift-version:
-  #        - 6.1
-  #  runs-on: ubuntu-latest
-  #  timeout-minutes: 60
-  #  steps:
-  #    - name: Check out code
-  #      uses: actions/checkout@v4
-  #    - name: Run unit tests
-  #      uses: skiptools/swift-android-action@v2
-  #      with:
-  #        swift-version: ${{ matrix.swift-version }}
-  #        swift-test-flags: --enable-all-traits

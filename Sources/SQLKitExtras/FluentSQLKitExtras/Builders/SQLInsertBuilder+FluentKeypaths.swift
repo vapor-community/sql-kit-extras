@@ -19,6 +19,25 @@ extension SQLInsertBuilder {
         return self
     }
 
+    /// Allow specifying a set of unqualified column names for an insert builder using Fluent model keypaths which all
+    /// belong to the same model. This is identical to ``columns<each Schema, each QueryAddressableProperty>(_: repeat...)``,
+    /// except that on that method, each KeyPath can refer to a different Schema, forcing the caller to specify the root
+    /// type on all of them. However, it is a very common use case to specify many keypaths from the same model in a row,
+    /// e.g., `.columns(\MyModel.$foo, \MyModel.$bar, \MyModel.$baz, \MyModel.$bam)`. This quickly becomes quite tedious.
+    /// By contrast, this method accepts only a single `Schema` type, and all KeyPaths are assumed to refer to it, allowing
+    /// the previous example to be written as `.columns(of: MyModel.self, \.$bar, \.$baz, \.$bam)`. As with all other
+    /// `.columns()` methods of `SQLInsertBuilder`, this method _replaces_ all existing columns.
+    @discardableResult
+    public func columns<S: Schema, each P: QueryAddressableProperty>(
+        of: S.Type, _ keypaths: repeat KeyPath<S, each P>
+    ) -> Self {
+        self.insert.columns = []
+        for keypath in repeat each keypaths {
+          self.insert.columns.append(.identifier(keypath))
+        }
+        return self
+    }
+
     /// Allow specifying a column or columns for ignoring insert conflicts using Fluent model keypaths.
     @discardableResult
     public func ignoringConflicts<each F: Fields, each P: QueryAddressableProperty>(with keypaths: repeat KeyPath<each F, each P>) -> Self {
