@@ -28,7 +28,7 @@ extension SQLUnqualifiedColumnListBuilder {
     /// using Fluent model keypaths. To specify _unqualified_ columns with keypaths, consider using
     /// `SQLUnqualifiedColumnListBuilder.column(.identifier(\Model.$property))`. This is identical to
     /// ``columns<each Schema, each QueryAddressableProperty>(_: repeat...)``, except that on that method, each KeyPath
-    /// can refer to a different Schema,forcing the caller to specify the root type on all of them. However, it is a very
+    /// can refer to a different Schema, forcing the caller to specify the root type on all of them. However, it is a very
     /// common use case to specify many keypaths from the same model in a row, e.g.,
     /// `.columns(\MyModel.$foo, \MyModel.$bar, \MyModel.$baz, \MyModel.$bam)`. This quickly becomes quite tedious. By
     /// contrast, this method accepts only a single `Schema` type, and all KeyPaths are assumed to refer to it, allowing

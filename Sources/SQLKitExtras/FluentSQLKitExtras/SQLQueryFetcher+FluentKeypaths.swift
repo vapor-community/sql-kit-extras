@@ -44,7 +44,7 @@ extension SQLQueryFetcher {
     /// row (if any), returning the combined results as a tuple where the types of each item of the tuple are inferred
     /// from the property referenced by the corresponding keypath. If the query produced no results, `nil` is returned.
     /// This is identical to ``first<each Schema, each QueryAddressableProperty>(decodingColumns: repeat...)``, except
-    /// that on that method, each KeyPath can refer to a different Schema,forcing the caller to specify the root type on
+    /// that on that method, each KeyPath can refer to a different Schema, forcing the caller to specify the root type on
     /// all of them. However, it is a very common use case to specify many keypaths from the same model in a row, e.g.,
     /// `.first(decodingColumns: \MyModel.$foo, \MyModel.$bar, \MyModel.$baz, \MyModel.$bam)`. This quickly becomes quite
     /// tedious. By contrast, this method accepts only a single `Schema` type, and all KeyPaths are assumed to refer to
@@ -117,7 +117,7 @@ extension SQLQueryFetcher {
     /// row, returning the combined results as an array of tuples where the types of each item of the tuple are inferred
     /// from the property referenced by the corresponding keypath. This is identical to
     /// ``all<each Schema, each QueryAddressableProperty>(decodingColumns: repeat...)``, except that on that method, each
-    /// KeyPath can refer to a different Schema,forcing the caller to specify the root type on all of them. However, it is
+    /// KeyPath can refer to a different Schema, forcing the caller to specify the root type on all of them. However, it is
     /// a very common use case to specify many keypaths from the same model in a row, e.g.,
     /// `.all(decodingColumns: \MyModel.$foo, \MyModel.$bar, \MyModel.$baz, \MyModel.$bam)`. This quickly becomes quite
     /// tedious. By contrast, this method accepts only a single `Schema` type, and all KeyPaths are assumed to refer to

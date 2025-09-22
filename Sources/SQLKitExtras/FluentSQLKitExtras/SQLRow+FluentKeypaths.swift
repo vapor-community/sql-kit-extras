@@ -62,7 +62,7 @@ extension SQLRow {
     /// `SQLRow`, returning the combined results as a tuple where the types of each item of the tuple are inferred
     /// from the property referenced by the corresponding keypath. This is identical to
     /// ``decode<each Schema, each QueryAddressableProperty>(decodingColumns: repeat...)``, except that on that method,
-    /// each KeyPath can refer to a different Schema,forcing the caller to specify the root type on all of them. However,
+    /// each KeyPath can refer to a different Schema, forcing the caller to specify the root type on all of them. However,
     /// it is a very common use case to specify many keypaths from the same model in a row, e.g.,
     /// `.decode(columns: \MyModel.$foo, \MyModel.$bar, \MyModel.$baz, \MyModel.$bam)`. This quickly becomes quite
     /// tedious. By contrast, this method accepts only a single `Schema` type, and all KeyPaths are assumed to refer to
