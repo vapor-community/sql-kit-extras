@@ -141,6 +141,19 @@ struct FluentSQLKitExtrasTests {
         @Test
         func createTableBuilderExtensions() {
             #expect(serialize(MockSQLDatabase().create(table: FooModel.self)) == #"CREATE TABLE "foos""#)
+            
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$field, type: .text)) == #"CREATE TABLE "foos" ("field" TEXT)"#)
+            
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$field, type: .text, .notNull)) == #"CREATE TABLE "foos" ("field" TEXT NOT NULL)"#)
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$field, type: .text, .notNull, .unique)) == #"CREATE TABLE "foos" ("field" TEXT NOT NULL UNIQUE)"#)
+            
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$field, type: .text, [.notNull, .unique])) == #"CREATE TABLE "foos" ("field" TEXT NOT NULL UNIQUE)"#)
+            
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$parent, type: .bigint, .references(\FooModel.$id))) == #"CREATE TABLE "foos" ("parent_id" BIGINT REFERENCES "foos" ("id"))"#)
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$parent, type: .bigint, .references(\FooModel.$id, onDelete: .cascade))) == #"CREATE TABLE "foos" ("parent_id" BIGINT REFERENCES "foos" ("id") ON DELETE CASCADE)"#)
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$parent, type: .bigint, .references(\FooModel.$id, onDelete: .cascade, onUpdate: .restrict))) == #"CREATE TABLE "foos" ("parent_id" BIGINT REFERENCES "foos" ("id") ON DELETE CASCADE ON UPDATE RESTRICT)"#)
+            
+            #expect(serialize(MockSQLDatabase().create(table: FooModel.self).column(\FooModel.$parent, type: .bigint, .references(\FooModel.$id, onDelete: SQLRaw("SET DEFAULT")))) == #"CREATE TABLE "foos" ("parent_id" BIGINT REFERENCES "foos" ("id") ON DELETE SET DEFAULT)"#)
         }
 
         @Test
