@@ -67,6 +67,10 @@ func serialize(_ builder: some SQLQueryBuilder) -> String {
     builder.database.serialize(builder.query).sql
 }
 
+func serialize(_ builder: some SQLQueryBuilder & SQLExpression) -> String {
+    builder.database.serialize(builder.query).sql
+}
+
 func selectBuilder() -> SQLSelectBuilder {
     MockSQLDatabase().select()
 }
