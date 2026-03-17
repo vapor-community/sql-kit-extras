@@ -315,7 +315,7 @@ final class MockFluentDatabase: Database {
     let context: DatabaseContext = .init(
         configuration: MockConfiguration(),
         logger: .init(label: "mockdb", factory: ModifiedStreamLogHandler.standardOutput(label:)),
-        eventLoop: EmbeddedEventLoop()
+        eventLoop: NIOAsyncTestingEventLoop()
     )
     let inTransaction = false
 
@@ -327,7 +327,13 @@ final class MockFluentDatabase: Database {
 
     func execute(query: DatabaseQuery, onOutput: @escaping @Sendable (any DatabaseOutput) -> ()) -> EventLoopFuture<Void> {
         if !self.outputs.isEmpty {
-            for output in self.outputs.removeFirst() { onOutput(output) }
+            // This nonsense is because QueryBuilder expects its output function to be called on the event loop,
+            // and NIOAsyncTestingEventLoop doesn't return true unconditionally like EmbeddedEventLoop did
+            return self.eventLoop.makeFutureWithTask {
+                try await (self.eventLoop as! NIOAsyncTestingEventLoop).executeInContext {
+                    for output in self.outputs.removeFirst() { onOutput(output) }
+                }
+            }
         }
         return self.eventLoop.makeSucceededVoidFuture()
     }

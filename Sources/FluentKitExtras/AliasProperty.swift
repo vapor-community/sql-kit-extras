@@ -164,10 +164,9 @@ public struct AliasProperty<Model, Original>: Sendable
 /// Having to explicitly add the conformance to any additional property types anyone else might
 /// have implemented elsewhere is another reason it's unfortunate that we need the protocol.
 ///
-/// > Note: ``AliasProperty`` and ``UnwrappingAliasProperty`` are omitted from this list deliberately;
-/// > they are the only properties which are _not_ aliasable, partially due to their lack of conformance
-/// > the `Property` protocol. (It's probably possible to make aliases that can be chained, but it doesn't
-/// > seem worth the effort.)
+/// > Note: ``AliasProperty`` is omitted from this list deliberately; it is the only property which
+/// > is _not_ aliasable, partially due to its lack of conformance to the `Property` protocol. (It's
+/// > probably possible to make aliases that can be chained, but it doesn't seem worth the effort.)
 
 extension FluentKit.IDProperty: AliasableProperty {}
 extension FluentKit.CompositeIDProperty: AliasableProperty {}
