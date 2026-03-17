@@ -11,8 +11,8 @@ public struct SQLCastExpression: SQLExpression {
     /// Create a new ``SQLCastExpression``.
     ///
     /// - Parameters:
-    ///   - original: The original expression to be cast.
-    ///   - desiredType: The desired type to cast the original expression to.
+    ///   - expr: The original expression to be cast.
+    ///   - castType: The desired type to cast the original expression to.
     public init(expr: some SQLExpression, castType: some SQLExpression) {
         self.original = expr
         self.desiredType = castType
@@ -22,7 +22,7 @@ public struct SQLCastExpression: SQLExpression {
     ///
     /// - Parameters:
     ///   - original: The original expression to be cast.
-    ///   - desiredType: The desired type to cast the original expression to, represented as a string.
+    ///   - type: The desired type to cast the original expression to, represented as a string.
     public init(_ original: some SQLExpression, to type: some StringProtocol) {
         self.init(expr: original, castType: .identifier(type))
     }

@@ -54,9 +54,9 @@ extension Model {
 public final class FlatGroupProperty<Model, Value>
     where Model: FluentKit.Fields, Value: FluentKit.Fields
 {
-    /// The underlying storage of the properties nested on ``Value``. It is optional
-    /// only because ``FluentKit/Property``'s ``value`` requirement must always be
-    /// optional. It will never actually be `nil` in practice at runtime.
+    /// The underlying storage of the properties nested on `Value`. It is optional
+    /// only because `Property`'s `value` requirement must always be optional. It will
+    /// never actually be `nil` in practice at runtime.
     public var value: Value?
 
     /// Fluent property wrappers must return `self` as their ``projectedValue``.
@@ -123,7 +123,7 @@ public final class FlatGroupProperty<Model, Value>
 
 /// Provide `@FlatGroup` properties with a description which includes all of the relevant types in the result.
 extension FlatGroupProperty: CustomStringConvertible {
-    /// See ``Swift/CustomStringConvertible/description``.
+    // See `CustomStringConvertible.description`.
     public var description: String {
         "@\(Model.self).FlatGroup<\(Value.self)>()"
     }
@@ -138,17 +138,17 @@ extension FlatGroupProperty: AnyProperty, Property {}
 
 /// `@FlatGroup` has content that interacts with database queries (i.e. the properties it contains).
 extension FlatGroupProperty: AnyDatabaseProperty {
-    /// See ``FluentKit/AnyDatabaseProperty/keys``.
+    // See `AnyDatabaseProperty.keys`.
     public var keys: [FieldKey] {
         Value.keys
     }
 
-    /// See ``FluentKit/AnyDatabaseProperty/input(to:)``.
+    // See `AnyDatabaseProperty.input(to:)`.
     public func input(to input: any DatabaseInput) {
         self.value!.input(to: input)
     }
 
-    /// See ``FluentKit/AnyDatabaseProperty/output(from:)``.
+    // See `AnyDatabaseProperty.output(from:)`.
     public func output(from output: any DatabaseOutput) throws {
         try self.value!.output(from: output)
     }
@@ -159,13 +159,13 @@ extension FlatGroupProperty: AnyDatabaseProperty {
 /// `@FlatGroup` participates in ``FluentKit/Fields``'s ``Swift/Codable`` conformance (i.e. by
 /// passing it on to its contained properties).
 extension FlatGroupProperty: AnyCodableProperty {
-    /// See ``FluentKit/AnyCodableProperty/encode(to:)``.
+    // See `AnyCodableProperty.encode(to:)`.
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(self.value!)
     }
 
-    /// See ``FluentKit/AnyCodableProperty/decode(from:)``.
+    // See `AnyCodableProperty.decode(from:)`.
     public func decode(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
         self.value = try .some(container.decode(Value.self))
