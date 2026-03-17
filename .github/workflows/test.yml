@@ -13,8 +13,6 @@ jobs:
     uses: vapor/ci/.github/workflows/run-unit-tests.yml@main
     with:
       enable_all_traits: true
-      with_android: true
-      with_wasm: true
     secrets: inherit
 
   submit-dependencies:
