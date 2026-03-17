@@ -41,6 +41,100 @@ struct PostgreSQLKitExtrasTests {
         #expect(serialize(.psql_values([.list(.literal("foo")), .list(.literal("bar"))])) == #"VALUES ('foo'), ('bar')"#)
     }
 
+    @Test
+    func constraintConflictResolutionStrategy() {
+        #expect(
+            serialize(PostgreSQLConflictResolutionStrategy(constraint: "uq_users_email", action: .noAction))
+            == #"ON CONFLICT ON CONSTRAINT "uq_users_email" DO NOTHING"#
+        )
+
+        #expect(
+            serialize(PostgreSQLConflictResolutionStrategy(constraint: .identifier("uq_users_email"), action: .noAction))
+            == #"ON CONFLICT ON CONSTRAINT "uq_users_email" DO NOTHING"#
+        )
+
+        #expect(
+            serialize(PostgreSQLConflictResolutionStrategy(
+                constraint: "uq_users_email",
+                action: .update(assignments: [SQLColumnAssignment(settingExcludedValueFor: "email")], predicate: nil)
+            ))
+            == #"ON CONFLICT ON CONSTRAINT "uq_users_email" DO UPDATE SET "email" = EXCLUDED."email""#
+        )
+
+        #expect(
+            serialize(PostgreSQLConflictResolutionStrategy(
+                constraint: .identifier("uq_users_email"),
+                action: .update(assignments: [SQLColumnAssignment(settingExcludedValueFor: "email")], predicate: nil)
+            ))
+            == #"ON CONFLICT ON CONSTRAINT "uq_users_email" DO UPDATE SET "email" = EXCLUDED."email""#
+        )
+
+        #expect(
+            serialize(PostgreSQLConflictResolutionStrategy(
+                constraint: "uq_users_email",
+                action: .update(
+                    assignments: [SQLColumnAssignment(settingExcludedValueFor: "email")],
+                    predicate: SQLBinaryExpression(left: SQLColumn("active"), op: SQLBinaryOperator.equal, right: SQLLiteral.boolean(true))
+                )
+            ))
+            == #"ON CONFLICT ON CONSTRAINT "uq_users_email" DO UPDATE SET "email" = EXCLUDED."email" WHERE "active" = true"#
+        )
+
+        #expect(
+            serialize(PostgreSQLConflictResolutionStrategy(
+                constraint: .identifier("uq_users_email"),
+                action: .update(
+                    assignments: [SQLColumnAssignment(settingExcludedValueFor: "email")],
+                    predicate: SQLBinaryExpression(left: SQLColumn("active"), op: SQLBinaryOperator.equal, right: SQLLiteral.boolean(true))
+                )
+            ))
+            == #"ON CONFLICT ON CONSTRAINT "uq_users_email" DO UPDATE SET "email" = EXCLUDED."email" WHERE "active" = true"#
+        )
+
+        #expect(
+            serialize(MockSQLDatabase()
+                .insert(into: "users")
+                .columns("id", "email")
+                .values(SQLBind(1), SQLBind("alice@example.com"))
+                .psql_ignoringConflicts(withConstraint: "uq_users_email")
+            )
+            == #"INSERT INTO "users" ("id", "email") VALUES ($1, $2) ON CONFLICT ON CONSTRAINT "uq_users_email" DO NOTHING"#
+        )
+
+        #expect(
+            serialize(MockSQLDatabase()
+                .insert(into: "users")
+                .columns("id", "email")
+                .values(SQLBind(1), SQLBind("alice@example.com"))
+                .psql_ignoringConflicts(withConstraint: .identifier("uq_users_email"))
+            )
+            == #"INSERT INTO "users" ("id", "email") VALUES ($1, $2) ON CONFLICT ON CONSTRAINT "uq_users_email" DO NOTHING"#
+        )
+
+        #expect(
+            serialize(MockSQLDatabase()
+                .insert(into: "users")
+                .columns("id", "email")
+                .values(SQLBind(1), SQLBind("alice@example.com"))
+                .psql_onConflict(withConstraint: .identifier("uq_users_email")) { $0
+                    .set(excludedValueOf: "email")
+                }
+            )
+            == #"INSERT INTO "users" ("id", "email") VALUES ($1, $2) ON CONFLICT ON CONSTRAINT "uq_users_email" DO UPDATE SET "email" = EXCLUDED."email""#
+        )
+
+        #expect(
+            serialize(MockSQLDatabase()
+                .insert(into: "users")
+                .columns("id", "email")
+                .values(SQLBind(1), SQLBind("alice@example.com"))
+                .onConflict { $0.set(excludedValueOf: "email") }
+                .psql_ignoringConflicts(withConstraint: .identifier("uq_users_email"))
+            )
+            == #"INSERT INTO "users" ("id", "email") VALUES ($1, $2) ON CONFLICT ON CONSTRAINT "uq_users_email" DO NOTHING"#
+        )
+    }
+
     #if FluentSQLKitExtras
     @Suite("FluentPostgreSQLKit Extras")
     struct FluentPostgreSQLKitExtrasTests {
