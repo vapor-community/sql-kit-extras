@@ -113,9 +113,9 @@ extension SQLInsertBuilder {
     /// try await db.insert(into: "users")
     ///     .columns("id", "email", "name")
     ///     .values(1, "alice@example.com", "Alice")
-    ///     .psql_onConflict(withConstraint: .identifier("uq_users_email"), do: .update([
+    ///     .psql_onConflict(withConstraint: .identifier("uq_users_email") { $0
     ///         .set(excludedValueOf: "name")
-    ///     ]))
+    ///     }
     ///     .run()
     /// // INSERT INTO "users" ("id","email","name") VALUES ($1,$2,$3)
     /// // ON CONFLICT ON CONSTRAINT "uq_users_email" DO UPDATE SET "name" = EXCLUDED."name"
