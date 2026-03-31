@@ -1,6 +1,6 @@
-import protocol SQLKit.SQLDatabase
-import protocol FluentKit.Database
-import protocol FluentKit.AsyncMigration
+public import protocol SQLKit.SQLDatabase
+public import protocol FluentKit.Database
+public import protocol FluentKit.AsyncMigration
 
 /// A variant of `AsyncMigration` designed to simplify using SQLKit to write migrations.
 ///

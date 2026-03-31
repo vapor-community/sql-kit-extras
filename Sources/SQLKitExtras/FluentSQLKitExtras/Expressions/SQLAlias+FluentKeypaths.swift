@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLExpression {
     /// Allow specifying an alias using a Fluent model keypath.

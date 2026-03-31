@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLDatabase {
     /// Allow specifying a table for a `DELETE` query using a Fluent model.

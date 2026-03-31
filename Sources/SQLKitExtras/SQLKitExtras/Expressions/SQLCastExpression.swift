@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 /// Represents a `CAST` expression in SQL, which converts a value from one type to another.
 public struct SQLCastExpression: SQLExpression {

@@ -1,5 +1,5 @@
 #if PostgreSQLKitExtras
-import SQLKit
+public import SQLKit
 
 /// An expression representing a PostgreSQL `SET name = value` query.
 public struct PostgreSQLSetQuery: SQLExpression {

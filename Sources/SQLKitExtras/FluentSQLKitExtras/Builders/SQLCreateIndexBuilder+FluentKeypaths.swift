@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLCreateIndexBuilder {
     /// Allow specifying the target table for a `CREATE INDEX` query using a Fluent model.

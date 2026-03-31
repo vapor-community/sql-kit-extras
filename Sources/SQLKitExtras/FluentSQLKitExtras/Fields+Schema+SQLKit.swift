@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 /// Read each method's comments in the order they appear (from `fieldKey(for:)` through `sqlColumn(for:)`) for an
 /// _EXTREMELY_ detailed breakdown of how the heck this all works.

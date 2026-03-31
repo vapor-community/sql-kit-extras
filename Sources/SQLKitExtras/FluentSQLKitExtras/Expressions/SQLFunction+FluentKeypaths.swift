@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLExpression {
     /// Allow specifying an argument to the `length()` SQL function using a Fluent model keypath.

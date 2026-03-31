@@ -1,4 +1,5 @@
-import SQLKit
+#if PostgreSQLKitExtras
+public import SQLKit
 
 /// A PostgreSQL `ON CONFLICT ON CONSTRAINT` clause that targets a named constraint rather than
 /// a column list.
@@ -133,3 +134,4 @@ extension SQLInsertBuilder {
         return self
     }
 }
+#endif

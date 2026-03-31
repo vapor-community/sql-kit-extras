@@ -401,17 +401,17 @@ func fluentIso8601String(_ date: Date = .init()) -> String {
     TimestampFormatFactory<ISO8601TimestampFormat>.iso8601.makeFormat().serialize(date)!
 }
 
-public struct ModifiedStreamLogHandler: LogHandler {
-    public static func standardOutput(label: String) -> Self { .init(label: label) }
+struct ModifiedStreamLogHandler: LogHandler {
+    static func standardOutput(label: String) -> Self { .init(label: label) }
     private let label: String
-    public var logLevel: Logger.Level = .info, metadataProvider = LoggingSystem.metadataProvider, metadata = Logger.Metadata()
-    public subscript(metadataKey key: String) -> Logger.Metadata.Value? { get { self.metadata[key] } set { self.metadata[key] = newValue } }
-    internal init(label: String) { self.label = label }
-    public func log(level: Logger.Level, message: Logger.Message, metadata explicitMetadata: Logger.Metadata?, source: String, file: String, function: String, line: UInt) {
-        let prettyMetadata = self.prettify(Self.prepareMetadata(base: self.metadata, provider: self.metadataProvider, explicit: explicitMetadata))
-        print("\(self.timestamp()) \(level) \(self.label) :\(prettyMetadata.map { " \($0)" } ?? "") [\(source)] \(message)")
+    var logLevel: Logger.Level = .info, metadataProvider = LoggingSystem.metadataProvider, metadata = Logger.Metadata()
+    subscript(metadataKey key: String) -> Logger.Metadata.Value? { get { self.metadata[key] } set { self.metadata[key] = newValue } }
+    init(label: String) { self.label = label }
+    func log(event: LogEvent) {
+        let prettyMetadata = self.prettify(Self.prepareMetadata(base: self.metadata, provider: self.metadataProvider, explicit: event.metadata))
+        print("\(self.timestamp()) \(event.level) \(self.label) :\(prettyMetadata.map { " \($0)" } ?? "") [\(event.source)] \(event.message)")
     }
-    internal static func prepareMetadata(base: Logger.Metadata, provider: Logger.MetadataProvider?, explicit: Logger.Metadata?) -> Logger.Metadata {
+    static func prepareMetadata(base: Logger.Metadata, provider: Logger.MetadataProvider?, explicit: Logger.Metadata?) -> Logger.Metadata {
         var metadata = base
         if let provided = provider?.get(), !provided.isEmpty { metadata.merge(provided, uniquingKeysWith: { $1 }) }
         if let explicit = explicit, !explicit.isEmpty { metadata.merge(explicit, uniquingKeysWith: { $1 }) }
@@ -429,7 +429,7 @@ public struct ModifiedStreamLogHandler: LogHandler {
     }
 }
 extension Logger.MetadataValue {
-    public var prettyDescription: String {
+    var prettyDescription: String {
         switch self {
         case .dictionary(let dict): "[\(dict.mapValues(\.prettyDescription).lazy.sorted { $0.0 < $1.0 }.map { "\($0): \($1)" }.joined(separator: ", "))]"
         case .array(let list): "[\(list.map(\.prettyDescription).joined(separator: ", "))]"

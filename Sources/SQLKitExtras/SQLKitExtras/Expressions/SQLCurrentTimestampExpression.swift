@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 /// An expression representing a timestamp value corresponding to the current date and time.
 public struct SQLCurrentTimestampExpression: SQLExpression {

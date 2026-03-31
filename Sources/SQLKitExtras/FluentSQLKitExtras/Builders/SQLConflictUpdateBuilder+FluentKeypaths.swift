@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLConflictUpdateBuilder {
     /// Allow specifying a column to use the excluded value of on conflict using a Fluent model keypath.

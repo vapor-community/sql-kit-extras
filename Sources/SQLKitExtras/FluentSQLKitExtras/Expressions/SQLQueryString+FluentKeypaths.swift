@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLQueryString {
     /// Allow specifying a Fluent keypath as an identifier interpolation in an `SQLQueryString`.

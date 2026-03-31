@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLAliasedColumnListBuilder {
     /// Allow specifying a fully qualified column with an aliased name using a Fluent model keypath.

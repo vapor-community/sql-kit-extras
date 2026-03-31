@@ -1,5 +1,4 @@
-import FluentKit
-import NIOCore
+public import FluentKit
 
 extension Model {
     public typealias References<To, FromProp> = ReferencesProperty<Self, To, FromProp>

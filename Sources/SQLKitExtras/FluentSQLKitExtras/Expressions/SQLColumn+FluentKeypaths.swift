@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLExpression {
     /// Allow using `.column(_:)` with Fluent model keypaths. See `Schema.sqlColumn(for:)`.

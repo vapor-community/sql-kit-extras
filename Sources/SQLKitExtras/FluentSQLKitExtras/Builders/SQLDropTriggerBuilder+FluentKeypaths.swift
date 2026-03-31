@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLDropTriggerBuilder {
     /// Allow specifying the target table for a `DROP TRIGGER` query using a Fluent model.

@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 extension SQLExpression {
     /// A convenience method for creating an `SQLBind` from an encodable value.

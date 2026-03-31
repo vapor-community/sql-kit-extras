@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLSubqueryClauseBuilder {
     /// Allow specifying a table for a `FROM` clause using a Fluent model. Note that due to `FROM`'s place in query

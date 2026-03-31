@@ -1,5 +1,5 @@
 #if PostgreSQLKitExtras
-import SQLKit
+public import SQLKit
 
 /// An expression representing one of several binary string comparison operators specific to PostgreSQL.
 public enum PostgreSQLBinaryStringOperator: SQLExpression {

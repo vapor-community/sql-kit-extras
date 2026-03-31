@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLPartialResultBuilder {
     /// Allow specifying a sorting column using a Fluent model keypath. See `Schema.sqlColumn(for:)`.

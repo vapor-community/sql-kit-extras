@@ -1,13 +1,4 @@
-<p align="center"><img src="./Sources/SQLKitExtras/Documentation.docc/Resources/sql-kit-extras.svg" width="192" height="192"></p>
-<h1 align="center">SQLKitExtras</h1>
-<p align="center">
-<a href="https://discord.gg/vapor"><img src="https://design.vapor.codes/images/discordchat.svg" alt="Vapor Chat"></a>
-<a href="LICENSE"><img src="https://design.vapor.codes/images/mitlicense.svg" alt="MIT License"></a>
-<a href="https://github.com/vapor-community/sql-kit-extra/actions/workflows/test.yml"><img src="https://img.shields.io/github/actions/workflow/status/vapor-community/sql-kit-extras/test.yml?event=push&style=plastic&logo=github&label=tests&logoColor=ccc" alt="Continuous Integration"></a>
-<a href="https://codecov.io/github/vapor-community/sql-kit-extras"><img src="https://img.shields.io/codecov/c/github/vapor-community/sql-kit-extras?style=plastic&logo=codecov&label=codecov" alt="Code Coverage"></a>
-<a href="https://swift.org"><img src="https://design.vapor.codes/images/swift61up.svg" alt="Swift 6.1+"></a>
-<a href="https://swiftpackageindex.com/vapor-community/sql-kit-extras"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvapor-community%2Fsql-kit-extras%2Fbadge%3Ftype%3Dplatforms&style=plastic&color=09f" alt="Platform compatibility"></a>
-</p>
+# ``SQLKitExtras``
 
 A set of utilities intended to improve the usefulness of SQLKit 3 (and, nominally, Fluent 4).
 
@@ -37,4 +28,4 @@ _In short, use at your own risk._
 This package provides two traits:
   - `FluentSQLKitExtras`: This trait is **enabled by default**. It enables a number of utilities which permit the use of FluentKit models - mostly keypaths to the model properties - with SQLKit APIs. This is _separate_ from and does not affect the `FluentKitExtras` target, which provides additional utilities specifically for FluentKit.
   - `PostgreSQLKitExtras`: This trait is disabled by default. It enables several additional expressions and other utilties which require PostgreSQL-specific SQL syntax.
-  
+

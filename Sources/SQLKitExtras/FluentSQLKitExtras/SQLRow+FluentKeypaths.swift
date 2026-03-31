@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLRow {
     /// Allow using `SQLRow.contains(column:)` with Fluent model keypaths.

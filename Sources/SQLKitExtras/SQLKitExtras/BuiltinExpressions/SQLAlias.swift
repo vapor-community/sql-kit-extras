@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 extension SQLExpression {
     /// A convenience method for creating an `SQLAlias` from an identifier string and an alias string.

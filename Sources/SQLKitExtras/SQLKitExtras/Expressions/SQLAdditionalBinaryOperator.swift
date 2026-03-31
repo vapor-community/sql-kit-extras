@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 /// An expression representing one of several additional binary operators not represented by `SQLBinaryOperator`.
 public enum SQLAdditionalBinaryOperator: SQLExpression {

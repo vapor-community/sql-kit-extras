@@ -1,4 +1,4 @@
-import FluentKit
+public import FluentKit
 
 public enum RelationPointerKey<From, To, FromProp>: Sendable
     where

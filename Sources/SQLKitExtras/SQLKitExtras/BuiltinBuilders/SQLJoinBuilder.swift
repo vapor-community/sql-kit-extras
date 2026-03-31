@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 extension SQLJoinBuilder {
     /// Allow specifying aliases for joined tables directly in the join method.

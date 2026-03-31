@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 /// SQL unary expression operators.
 public enum SQLUnaryOperator: SQLExpression {
