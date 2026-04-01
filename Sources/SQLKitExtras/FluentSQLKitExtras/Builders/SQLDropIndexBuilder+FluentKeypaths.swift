@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLDropIndexBuilder {
     /// Allow specifying the target table for a `DROP INDEX` query using a Fluent model.

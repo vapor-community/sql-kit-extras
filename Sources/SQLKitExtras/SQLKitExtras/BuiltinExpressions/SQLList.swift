@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 extension SQLExpression {
     /// A convenience method for creating an `SQLList` from a list of component expressions and a separator string.

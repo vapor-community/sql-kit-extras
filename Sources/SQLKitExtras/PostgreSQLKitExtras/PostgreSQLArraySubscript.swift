@@ -1,5 +1,5 @@
 #if PostgreSQLKitExtras
-import SQLKit
+public import SQLKit
 
 /// An expression providing PostgreSQL's `array[N]` syntax for accessing elements of an array.
 public struct PostgreSQLArraySubscript: SQLExpression {

@@ -1,5 +1,4 @@
-import FluentKit
-import NIOCore
+public import FluentKit
 import struct SQLKit.SomeCodingKey
 
 extension Model {

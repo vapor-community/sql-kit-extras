@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras && PostgreSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLExpression {
     /// Convenience method for creating a ``PostgreSQLArraySubscript`` using Fluent keypaths for the array value

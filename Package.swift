@@ -5,6 +5,10 @@ let package = Package(
     name: "sql-kit-extras",
     platforms: [
         .macOS(.v10_15),
+        .iOS(.v13),
+        .watchOS(.v6),
+        .tvOS(.v13),
+        .visionOS(.v1),
     ],
     products: [
         .library(name: "SQLKitExtras", targets: ["SQLKitExtras"]),
@@ -26,8 +30,9 @@ let package = Package(
         ]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.0"),
-        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.52.0"),
+        .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
+        .package(url: "https://github.com/apple/swift-nio.git", from: "2.97.1"),
+        .package(url: "https://github.com/vapor/fluent-kit.git", from: "1.56.0"),
         .package(url: "https://github.com/vapor/sql-kit.git", from: "3.35.0"),
     ],
     targets: [
@@ -50,6 +55,8 @@ let package = Package(
         .testTarget(
             name: "SQLKitExtrasTests",
             dependencies: [
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOEmbedded", package: "swift-nio"),
                 .target(name: "SQLKitExtras"),
             ],
             swiftSettings: swiftSettings
@@ -57,6 +64,8 @@ let package = Package(
         .testTarget(
             name: "FluentKitExtrasTests",
             dependencies: [
+                .product(name: "NIOCore", package: "swift-nio"),
+                .product(name: "NIOEmbedded", package: "swift-nio"),
                 .target(name: "FluentKitExtras"),
             ],
             swiftSettings: swiftSettings
@@ -65,6 +74,10 @@ let package = Package(
 )
 
 var swiftSettings: [SwiftSetting] { [
-  .enableUpcomingFeature("ExistentialAny"),
-  .enableUpcomingFeature("MemberImportVisibility"),
+    .enableUpcomingFeature("ExistentialAny"),
+    .enableUpcomingFeature("InternalImportsByDefault"),
+    .enableUpcomingFeature("MemberImportVisibility"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+    //.enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("ImmutableWeakCaptures"),
 ] }

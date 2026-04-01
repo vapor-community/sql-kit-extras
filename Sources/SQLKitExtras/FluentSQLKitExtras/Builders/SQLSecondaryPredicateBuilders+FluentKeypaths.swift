@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLSecondaryPredicateBuilder {
     /// Allow specifying a conjunctive `HAVING` condition using a Fluent model keypath as the left-hand operand.

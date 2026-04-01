@@ -1,5 +1,4 @@
-import FluentKit
-import NIOCore
+public import FluentKit
 
 extension Model {
     public typealias OptionalReference<To, FromProp> = OptionalReferenceProperty<Self, To, FromProp>

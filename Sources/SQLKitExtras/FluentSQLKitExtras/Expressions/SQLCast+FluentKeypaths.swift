@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLExpression {
     /// Convenience method for creating a ``SQLCastExpression`` expression using a Fluent keypath for the value and a string

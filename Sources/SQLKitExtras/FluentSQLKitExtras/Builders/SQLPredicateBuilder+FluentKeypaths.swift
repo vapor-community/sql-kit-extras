@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLPredicateBuilder {
     /// Allow specifying a conjunctive `WHERE` condition using a Fluent model keypath as the left-hand operand.

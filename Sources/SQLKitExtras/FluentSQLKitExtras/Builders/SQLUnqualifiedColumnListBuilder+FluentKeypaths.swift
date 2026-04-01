@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLUnqualifiedColumnListBuilder {
     /// Despite the name of the builder protocol, this method specifies a _fully qualified_ column using a Fluent model

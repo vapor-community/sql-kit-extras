@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLReturningBuilder {
     /// Allow specifying columns in a `RETURNING` clause using Fluent model keypaths.

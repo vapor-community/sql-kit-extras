@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 /// Represents a `CASE [WHEN ... THEN ...] ... [ELSE ...] END` expression.
 public struct SQLCaseExpression: SQLExpression {

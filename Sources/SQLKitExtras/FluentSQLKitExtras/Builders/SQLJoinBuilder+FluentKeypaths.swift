@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLJoinBuilder {
     /// Allow specifying a table for a `JOIN` clause using a Fluent model and the join condition using two Fluent model

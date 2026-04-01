@@ -1,5 +1,5 @@
 import Algorithms
-import SQLKit
+public import SQLKit
 
 extension SQLExpression {
     /// A convenience method for creating an `SQLFunction` from a name and a list of argument expressions.

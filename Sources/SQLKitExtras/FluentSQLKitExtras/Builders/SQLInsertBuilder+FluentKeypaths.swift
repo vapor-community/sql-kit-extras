@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 /// > Note: `SQLInsertBuilder` is not an `SQLUnqualifiedColumnListBuilder`, although it should be. See `SQLInsertBuilder`'s
 /// > documentation for details.

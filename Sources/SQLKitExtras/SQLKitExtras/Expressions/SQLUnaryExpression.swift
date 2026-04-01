@@ -1,4 +1,4 @@
-import SQLKit
+public import SQLKit
 
 /// A fundamental syntactical expression - a unary operator and its single operand.
 public struct SQLUnaryExpression: SQLExpression {

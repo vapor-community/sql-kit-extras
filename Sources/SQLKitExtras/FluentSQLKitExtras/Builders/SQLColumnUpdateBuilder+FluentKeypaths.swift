@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLColumnUpdateBuilder {
     /// Allow specifying a column to update using a Fluent model keypath.

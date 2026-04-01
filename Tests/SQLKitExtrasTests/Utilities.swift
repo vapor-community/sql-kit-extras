@@ -1,6 +1,6 @@
 import Logging
 import NIOCore
-import NIOPosix
+import NIOEmbedded
 import SQLKit
 
 struct TestingSQLDialect: SQLDialect {
@@ -22,7 +22,7 @@ struct TestingSQLDialect: SQLDialect {
 
 struct MockSQLDatabase: SQLDatabase {
     let logger: Logger = .init(label: "", factory: SwiftLogNoOpLogHandler.init(_:))
-    let eventLoop: any EventLoop = NIOSingletons.posixEventLoopGroup.any()
+    let eventLoop: any EventLoop = NIOAsyncTestingEventLoop()
     let dialect: any SQLDialect
 
     let resultSet: [ThinSQLRow]

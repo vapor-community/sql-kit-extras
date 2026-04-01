@@ -1,6 +1,6 @@
 #if FluentSQLKitExtras
-import FluentKit
-import SQLKit
+public import FluentKit
+public import SQLKit
 
 extension SQLQueryFetcher {
     /// Allow specifying a Fluent model keypath as a column name when decoding a single query fetcher result.
