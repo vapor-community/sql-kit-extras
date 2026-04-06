@@ -2,4 +2,4 @@ version: 1
 builder:
   configs:
     - documentation_targets: [SQLKitExtras, FluentKitExtras]
-      custom_documentation_parameters: ['--experimental-skip-synthesized-symbols', '--enable-experimental-code-block-annotations', '--enable-inherited-docs', '--enable-experimental-external-link-support', '--enable-experimental-overloaded-symbol-presentation']
+      custom_documentation_parameters: ['--experimental-skip-synthesized-symbols', '--enable-inherited-docs', '--enable-experimental-overloaded-symbol-presentation']
