@@ -1,4 +1,9 @@
 public import FluentKit
+#if canImport(FoundationEssentials)
+public import struct FoundationEssentials.Date
+#else
+public import struct Foundation.Date
+#endif
 
 // MARK: - "Can be aliased" property capability
 
