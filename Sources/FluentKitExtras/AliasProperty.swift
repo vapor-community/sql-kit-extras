@@ -1,5 +1,4 @@
 public import FluentKit
-public import struct Foundation.Date
 
 // MARK: - "Can be aliased" property capability
 

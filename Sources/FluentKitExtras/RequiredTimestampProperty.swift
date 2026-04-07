@@ -1,5 +1,9 @@
 public import FluentKit
+#if canImport(FoundationEssentials)
+public import struct FoundationEssentials.Date
+#else
 public import struct Foundation.Date
+#endif
 
 extension Model {
     public typealias RequiredTimestamp<Format> = RequiredTimestampProperty<Self, Format>

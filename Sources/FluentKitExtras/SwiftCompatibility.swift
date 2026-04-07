@@ -15,4 +15,3 @@ extension OptionalReferenceProperty: _SQLKitExtrasSendableMetatype {}
 extension PointerProperty: _SQLKitExtrasSendableMetatype {}
 extension ReferencesProperty: _SQLKitExtrasSendableMetatype {}
 extension RequiredTimestampProperty: _SQLKitExtrasSendableMetatype {}
-
