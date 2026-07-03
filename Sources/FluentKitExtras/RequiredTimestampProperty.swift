@@ -14,7 +14,7 @@ extension Model {
 /// A Fluent property wrapper which provides the same functionality as the built-in `TimestampProperty` wrapper,
 /// except that its value is not optional.
 @propertyWrapper
-public final class RequiredTimestampProperty<Model, Format>
+public final class RequiredTimestampProperty<Model, Format>: SendableMetatype
     where
         Model: FluentKit.Model,
         Format: TimestampFormat

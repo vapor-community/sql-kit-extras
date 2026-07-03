@@ -3,7 +3,7 @@ public import FluentKit
 public enum RelationPointerKey<From, To, FromProp>: Sendable
     where
         From: FluentKit.Model, To: FluentKit.Model,
-        FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype,
+        FromProp: FluentKit.QueryableProperty & SendableMetatype,
         FromProp.Model == From, FromProp.Value: Hashable
 {
     case required(KeyPath<To, To.Pointer<From, FromProp>>)

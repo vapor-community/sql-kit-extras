@@ -4,7 +4,7 @@ extension Model {
     public typealias OptionalReference<To, FromProp> = OptionalReferenceProperty<Self, To, FromProp>
         where
             To: FluentKit.Model,
-            FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype, FromProp.Model == Self, FromProp.Value: Hashable
+            FromProp: FluentKit.QueryableProperty & SendableMetatype, FromProp.Model == Self, FromProp.Value: Hashable
 }
 
 // MARK: Type
@@ -21,7 +21,7 @@ extension Model {
 @propertyWrapper
 public final class OptionalReferenceProperty<From, To, FromProp>: @unchecked Sendable
     where From: FluentKit.Model, To: FluentKit.Model,
-    FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype, FromProp.Model == From, FromProp.Value: Hashable
+    FromProp: FluentKit.QueryableProperty & SendableMetatype, FromProp.Model == From, FromProp.Value: Hashable
 {
     public let parentKey: RelationPointerKey<From, To, FromProp>
     let fromKeypath: KeyPath<From, FromProp>
@@ -228,7 +228,7 @@ extension OptionalReferenceProperty: EagerLoadable {
 private struct OptionalReferenceEagerLoader<From, To, FromProp>: EagerLoader
     where
         From: FluentKit.Model, To: FluentKit.Model,
-        FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype,
+        FromProp: FluentKit.QueryableProperty & SendableMetatype,
         FromProp.Model == From, FromProp.Value: Hashable
 {
     // Needed because the extension that normally adds this inside FluentKit is not public.
@@ -270,7 +270,7 @@ private struct OptionalReferenceEagerLoader<From, To, FromProp>: EagerLoader
 private struct ThroughReferenceEagerLoader<From, Through, FromProp, Loader>: EagerLoader
     where
         From: FluentKit.Model,
-        Loader: EagerLoader, Loader.Model == Through, FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype,
+        Loader: EagerLoader, Loader.Model == Through, FromProp: FluentKit.QueryableProperty & SendableMetatype,
         FromProp.Model == From, FromProp.Value: Hashable
 {
     // Needed because the extension that normally adds this inside FluentKit is not public.

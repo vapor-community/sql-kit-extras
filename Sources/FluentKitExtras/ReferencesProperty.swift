@@ -4,7 +4,7 @@ extension Model {
     public typealias References<To, FromProp> = ReferencesProperty<Self, To, FromProp>
         where
             To: FluentKit.Model,
-            FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype,
+            FromProp: FluentKit.QueryableProperty & SendableMetatype,
             FromProp.Model == Self, FromProp.Value: Hashable
 }
 
@@ -23,7 +23,7 @@ extension Model {
 public final class ReferencesProperty<From, To, FromProp>: @unchecked Sendable
     where
         From: FluentKit.Model, To: FluentKit.Model,
-        FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype, FromProp.Model == From, FromProp.Value: Hashable
+        FromProp: FluentKit.QueryableProperty & SendableMetatype, FromProp.Model == From, FromProp.Value: Hashable
 {
     public let parentKey: RelationPointerKey<From, To, FromProp>
     let fromKeypath: KeyPath<From, FromProp>
@@ -243,7 +243,7 @@ extension ReferencesProperty: EagerLoadable {
 private struct ReferencesEagerLoader<From, To, FromProp>: EagerLoader
     where
         From: FluentKit.Model, To: FluentKit.Model,
-        FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype, FromProp.Model == From, FromProp.Value: Hashable
+        FromProp: FluentKit.QueryableProperty & SendableMetatype, FromProp.Model == From, FromProp.Value: Hashable
 {
     // Needed because the extension that normally adds this inside FluentKit is not public.
     func anyRun(models: [any AnyModel], on database: any Database) -> EventLoopFuture<Void> {
@@ -282,7 +282,7 @@ private struct ReferencesEagerLoader<From, To, FromProp>: EagerLoader
 private struct ThroughReferencesEagerLoader<From, Through, FromProp, Loader>: EagerLoader
     where
         From: FluentKit.Model,
-        Loader: EagerLoader, Loader.Model == Through, FromProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype,
+        Loader: EagerLoader, Loader.Model == Through, FromProp: FluentKit.QueryableProperty & SendableMetatype,
         FromProp.Model == From, FromProp.Value: Hashable
 {
     // Needed because the extension that normally adds this inside FluentKit is not public.
