@@ -5,7 +5,7 @@ extension Model {
     public typealias Pointer<To, ToProp> = PointerProperty<Self, To, ToProp>
         where
             To: FluentKit.Model,
-            ToProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype,
+            ToProp: FluentKit.QueryableProperty & SendableMetatype,
             ToProp.Model == To, ToProp.Value: Hashable
 }
 
@@ -29,7 +29,7 @@ extension Model {
 @propertyWrapper
 public final class PointerProperty<From, To, ToProp>: @unchecked Sendable
     where From: FluentKit.Model, To: FluentKit.Model,
-    ToProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype, ToProp.Model == To, ToProp.Value: Hashable
+    ToProp: FluentKit.QueryableProperty & SendableMetatype, ToProp.Model == To, ToProp.Value: Hashable
 {
     @FieldProperty<From, ToProp.Value>
     public var ref: ToProp.Value
@@ -184,7 +184,7 @@ extension PointerProperty: EagerLoadable {
 private struct PointerEagerLoader<From, To, ToProp>: EagerLoader
     where
         From: FluentKit.Model, To: FluentKit.Model,
-        ToProp: FluentKit.QueryableProperty & _SQLKitExtrasSendableMetatype, ToProp.Model == To, ToProp.Value: Hashable
+        ToProp: FluentKit.QueryableProperty & SendableMetatype, ToProp.Model == To, ToProp.Value: Hashable
 {
     // Needed because the extension that normally adds this inside FluentKit is not public.
     func anyRun(models: [any AnyModel], on database: any Database) -> EventLoopFuture<Void> {
@@ -222,7 +222,7 @@ private struct ThroughPointerEagerLoader<From, Through, ThroughProp, Loader>: Ea
     where
         From: FluentKit.Model,
         Loader: EagerLoader, Loader.Model == Through,
-        ThroughProp: QueryableProperty & _SQLKitExtrasSendableMetatype, ThroughProp.Model == Through, ThroughProp.Value: Hashable
+        ThroughProp: QueryableProperty & SendableMetatype, ThroughProp.Model == Through, ThroughProp.Value: Hashable
 {
     // Needed because the extension that normally adds this inside FluentKit is not public.
     func anyRun(models: [any AnyModel], on database: any Database) -> EventLoopFuture<Void> {

@@ -1,15 +1,14 @@
-<p align="center">
-  <img src="./Sources/SQLKitExtras/Documentation.docc/Resources/sql-kit-extras.svg" width="192" height="192">
-</p>
-<h1 align="center">SQLKitExtras</h1>
-
 <div align="center">
   
+<img src="./Sources/SQLKitExtras/Documentation.docc/Resources/sql-kit-extras.svg" width="192" height="192">
+<br>
+<h1>SQLKitExtras</h1>
+
 [![Vapor Chat](https://design.vapor.codes/images/discordchat.svg)](https://discord.gg/vapor)
 [![MIT License](https://design.vapor.codes/images/mitlicense.svg)](./LICENSE)
 [![Continuous Integration](https://img.shields.io/github/actions/workflow/status/vapor-community/sql-kit-extras/test.yml?event=push&style=plastic&logo=github&label=tests&logoColor=ccc)](https://github.com/vapor-community/sql-kit-extra/actions/workflows/test.yml)
 [![Code Coverage](https://img.shields.io/codecov/c/github/vapor-community/sql-kit-extras?style=plastic&logo=codecov&label=codecov)](https://codecov.io/github/vapor-community/sql-kit-extras)
-[![Swift 6.1+](https://design.vapor.codes/images/swift61up.svg)](https://swift.org)
+[![Swift 6.2+](https://design.vapor.codes/images/swift62up.svg)](https://swift.org)
 [![Platform Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fvapor-community%2Fsql-kit-extras%2Fbadge%3Ftype%3Dplatforms&style=plastic&color=09f)](https://swiftpackageindex.com/vapor-community/sql-kit-extras)
 
 </div>

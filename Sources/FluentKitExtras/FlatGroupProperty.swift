@@ -51,7 +51,7 @@ extension Model {
 ///   everything appears to work correctly at first, it will eventually cause enough confusion
 ///   in Fluent to have unpredictable results.
 @propertyWrapper @dynamicMemberLookup
-public final class FlatGroupProperty<Model, Value>
+public final class FlatGroupProperty<Model, Value>: SendableMetatype
     where Model: FluentKit.Fields, Value: FluentKit.Fields
 {
     /// The underlying storage of the properties nested on `Value`. It is optional
