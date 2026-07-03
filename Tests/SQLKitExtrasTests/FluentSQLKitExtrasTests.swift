@@ -218,12 +218,16 @@ struct FluentSQLKitExtrasTests {
             #expect(serialize(selectBuilder().where(.literal(true)).where(\FooModel.$field, .equal, 0)) == #"SELECT WHERE true AND "foos"."field" = $1"#)
             #expect(serialize(selectBuilder().where(.literal(true)).where(\FooModel.$field, .equal, \FooModel.$id)) == #"SELECT WHERE true AND "foos"."field" = "foos"."id""#)
             #expect(serialize(selectBuilder().where(.literal(true)).where(\FooModel.$field, .equal, .literal(0))) == #"SELECT WHERE true AND "foos"."field" = 0"#)
+            #expect(serialize(selectBuilder().where(.literal(true)).where(\FooModel.$field, .AND, 0)) == #"SELECT WHERE true AND "foos"."field" & $1"#)
+            #expect(serialize(selectBuilder().where(.literal(true)).where(\FooModel.$field, .AND, \FooModel.$optionalField)) == #"SELECT WHERE true AND "foos"."field" & "foos"."optional_field""#)
             #expect(serialize(selectBuilder().where(.literal(true)).where(\FooModel.$field, .AND(), .literal(0))) == #"SELECT WHERE true AND "foos"."field" & 0"#)
             #expect(serialize(selectBuilder().where(.literal(true)).where(\FooModel.$boolean)) == #"SELECT WHERE true AND "foos"."boolean""#)
 
             #expect(serialize(selectBuilder().orWhere(.literal(true)).orWhere(\FooModel.$field, .equal, 0)) == #"SELECT WHERE true OR "foos"."field" = $1"#)
             #expect(serialize(selectBuilder().orWhere(.literal(true)).orWhere(\FooModel.$field, .equal, \FooModel.$id)) == #"SELECT WHERE true OR "foos"."field" = "foos"."id""#)
             #expect(serialize(selectBuilder().orWhere(.literal(true)).orWhere(\FooModel.$field, .equal, .literal(0))) == #"SELECT WHERE true OR "foos"."field" = 0"#)
+            #expect(serialize(selectBuilder().orWhere(.literal(true)).orWhere(\FooModel.$field, .AND, 0)) == #"SELECT WHERE true OR "foos"."field" & $1"#)
+            #expect(serialize(selectBuilder().orWhere(.literal(true)).orWhere(\FooModel.$field, .AND, \FooModel.$optionalField)) == #"SELECT WHERE true OR "foos"."field" & "foos"."optional_field""#)
             #expect(serialize(selectBuilder().orWhere(.literal(true)).orWhere(\FooModel.$field, .AND(), .literal(0))) == #"SELECT WHERE true OR "foos"."field" & 0"#)
             #expect(serialize(selectBuilder().orWhere(.literal(true)).orWhere(\FooModel.$boolean)) == #"SELECT WHERE true OR "foos"."boolean""#)
         }
@@ -238,12 +242,16 @@ struct FluentSQLKitExtrasTests {
             #expect(serialize(selectBuilder().having(.literal(true)).having(\FooModel.$field, .equal, 0)) == #"SELECT HAVING true AND "foos"."field" = $1"#)
             #expect(serialize(selectBuilder().having(.literal(true)).having(\FooModel.$field, .equal, \FooModel.$id)) == #"SELECT HAVING true AND "foos"."field" = "foos"."id""#)
             #expect(serialize(selectBuilder().having(.literal(true)).having(\FooModel.$field, .equal, .literal(0))) == #"SELECT HAVING true AND "foos"."field" = 0"#)
+            #expect(serialize(selectBuilder().having(.literal(true)).having(\FooModel.$field, .AND, 0)) == #"SELECT HAVING true AND "foos"."field" & $1"#)
+            #expect(serialize(selectBuilder().having(.literal(true)).having(\FooModel.$field, .AND, \FooModel.$optionalField)) == #"SELECT HAVING true AND "foos"."field" & "foos"."optional_field""#)
             #expect(serialize(selectBuilder().having(.literal(true)).having(\FooModel.$field, .AND(), .literal(0))) == #"SELECT HAVING true AND "foos"."field" & 0"#)
             #expect(serialize(selectBuilder().having(.literal(true)).having(\FooModel.$boolean)) == #"SELECT HAVING true AND "foos"."boolean""#)
 
             #expect(serialize(selectBuilder().orHaving(.literal(true)).orHaving(\FooModel.$field, .equal, 0)) == #"SELECT HAVING true OR "foos"."field" = $1"#)
             #expect(serialize(selectBuilder().orHaving(.literal(true)).orHaving(\FooModel.$field, .equal, \FooModel.$id)) == #"SELECT HAVING true OR "foos"."field" = "foos"."id""#)
             #expect(serialize(selectBuilder().orHaving(.literal(true)).orHaving(\FooModel.$field, .equal, .literal(0))) == #"SELECT HAVING true OR "foos"."field" = 0"#)
+            #expect(serialize(selectBuilder().orHaving(.literal(true)).orHaving(\FooModel.$field, .AND, 0)) == #"SELECT HAVING true OR "foos"."field" & $1"#)
+            #expect(serialize(selectBuilder().orHaving(.literal(true)).orHaving(\FooModel.$field, .AND, \FooModel.$optionalField)) == #"SELECT HAVING true OR "foos"."field" & "foos"."optional_field""#)
             #expect(serialize(selectBuilder().orHaving(.literal(true)).orHaving(\FooModel.$field, .AND(), .literal(0))) == #"SELECT HAVING true OR "foos"."field" & 0"#)
             #expect(serialize(selectBuilder().orHaving(.literal(true)).orHaving(\FooModel.$boolean)) == #"SELECT HAVING true OR "foos"."boolean""#)
         }

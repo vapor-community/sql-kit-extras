@@ -15,6 +15,12 @@ public enum PostgreSQLBinaryStringOperator: SQLExpression {
     /// The PostgreSQL `NOT SIMILAR TO` operator.
     case notSimilarTo
 
+    /// Convenience alias for ``PostgreSQLBinaryStringOperator/caseInsensitiveLike``.
+    public static var ilike:    Self { .caseInsensitiveLike }
+
+    /// Convenience alias for ``PostgreSQLBinaryStringOperator/caseInsensitiveNotLike``.
+    public static var notILike: Self { .caseInsensitiveNotLike }
+
     // See `SQLExpression.serialize(to:)`.
     public func serialize(to serializer: inout SQLSerializer) {
         switch self {
@@ -23,6 +29,18 @@ public enum PostgreSQLBinaryStringOperator: SQLExpression {
         case .similarTo:              serializer.write("SIMILAR TO")
         case .notSimilarTo:           serializer.write("NOT SIMILAR TO")
         }
+    }
+}
+
+extension SQLExpression {
+    /// A convenience method for creating an `SQLBinaryExpression` from an expression operand, a
+    /// ``PostgreSQLBinaryStringOperator``, and an encodable operand.
+    public static func expr(
+        _ lhs: some SQLExpression,
+        _ op: PostgreSQLBinaryStringOperator,
+        _ rhs: some Encodable & Sendable
+    ) -> Self where Self == SQLBinaryExpression {
+        .init(left: lhs, op: op, right: .bind(rhs))
     }
 }
 

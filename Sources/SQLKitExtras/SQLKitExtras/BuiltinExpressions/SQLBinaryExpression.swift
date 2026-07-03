@@ -20,9 +20,9 @@ extension SQLExpression {
         .init(lhs, op, rhs)
     }
 
-    /// Produces a left-nested binary expression joining each of the provided subexpressions with the given operator.
-    /// Due to the limtations of variadic generics, at least two subexpressions must be provided. Subexpressions may be
-    /// of any valid expression type.
+    /// Produces a left-nested binary expression joining each of the provided subexpressions with the given
+    /// operator. Due to the limtations of variadic generics, at least two subexpressions must be provided.
+    /// Subexpressions may be of any valid expression type.
     ///
     /// Example:
     ///
@@ -53,7 +53,6 @@ extension SQLExpression {
     /// // Serializes to (Postgres dialect):
     /// //  "foo" = $1 AND NOT false AND bool_func() AND "baz" NOT LIKE '%bamf%' ['bar'::text]
     /// ```
-    ///
     public static func expr<each E: SQLExpression>(
         op: SQLBinaryOperator,
         _ expr1: some SQLExpression,

@@ -213,6 +213,14 @@ struct SQLKitExtrasTests {
             #expect(MockSQLDatabase(dialect: "postgresql").serialize(.XOR()).sql == #"#"#)
             #expect(serialize(.leftShift()) == #"<<"#)
             #expect(serialize(.rightShift()) == #">>"#)
+
+            #expect(serialize(.expr(.column("foo"), .AND, 1)) == #""foo" & $1"#)
+            #expect(serialize(.expr(.column("foo"), .OR, 1)) == #""foo" | $1"#)
+            #expect(serialize(.expr(.column("foo"), .XOR, 1)) == #""foo" $1"#)
+            #expect(MockSQLDatabase(dialect: "mysql").serialize(.expr(.column("foo"), .XOR, 1)).sql == #""foo" ^ $1"#)
+            #expect(MockSQLDatabase(dialect: "postgresql").serialize(.expr(.column("foo"), .XOR, 1)).sql == #""foo" # $1"#)
+            #expect(serialize(.expr(.column("foo"), .leftShift, 1)) == #""foo" << $1"#)
+            #expect(serialize(.expr(.column("foo"), .rightShift, 1)) == #""foo" >> $1"#)
         }
 
         @Test
