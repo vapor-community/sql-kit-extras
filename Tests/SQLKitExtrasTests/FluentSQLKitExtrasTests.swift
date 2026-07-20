@@ -288,9 +288,17 @@ struct FluentSQLKitExtrasTests {
         @Test
         func betweenExpressionExtensions() {
             let SB = { selectBuilder() }
-            // N.B.: These are really extensions to SQLPredicateBuilder and SQLSecondaryPredicateBuilder; there is no
-            // obvious clean syntax for making SQLExpression extensions for SQLBetween. These are listed as expression
-            // extensions anyway because they make a lot more sense being in their own file.
+
+            #expect(serialize(.expr(\FooModel.$id, between: .literal(0), and: .literal(1))) == #""foos"."id" BETWEEN 0 AND 1"#)
+            #expect(serialize(.expr(\FooModel.$id, between: \FooModel.$id, and: .literal(1))) == #""foos"."id" BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(.expr(\FooModel.$id, between: .literal(0), and: \FooModel.$id)) == #""foos"."id" BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(.expr(.literal(0), between: \FooModel.$id, and: .literal(1))) == #"0 BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(.expr(.literal(0), between: .literal(0), and: \FooModel.$id)) == #"0 BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(.expr(.literal(0), between: \FooModel.$id, and: \FooModel.$id)) == #"0 BETWEEN "foos"."id" AND "foos"."id""#)
+            #expect(serialize(.expr(\FooModel.$id, between: \FooModel.$id, and: \FooModel.$id)) == #""foos"."id" BETWEEN "foos"."id" AND "foos"."id""#)
+
+            // N.B.: These are really extensions to SQLPredicateBuilder and SQLSecondaryPredicateBuilder. They're placed alongside
+            // the SQLBetween expression extensions anyway because they make a lot more sense being in their own file.
             #expect(serialize(SB().where(.null()).where(\FooModel.$id, between: .literal(0), and: .literal(1))) == #"SELECT WHERE NULL AND "foos"."id" BETWEEN 0 AND 1"#)
             #expect(serialize(SB().where(.null()).where(\FooModel.$id, between: \FooModel.$id, and: .literal(1))) == #"SELECT WHERE NULL AND "foos"."id" BETWEEN "foos"."id" AND 1"#)
             #expect(serialize(SB().where(.null()).where(\FooModel.$id, between: .literal(0), and: \FooModel.$id)) == #"SELECT WHERE NULL AND "foos"."id" BETWEEN 0 AND "foos"."id""#)
