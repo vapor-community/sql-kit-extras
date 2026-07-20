@@ -15,6 +15,11 @@ struct SQLKitExtrasTests {
         }
 
         @Test
+        func betweenExpression() {
+            #expect(serialize(.expr(.column("foo"), between: .column("bar"), and: .column("baz"))) == #""foo" BETWEEN "bar" AND "baz""#)
+        }
+
+        @Test
         func binaryExpression() {
             #expect(serialize(.expr(.column("foo"), .equal, 1)) == #""foo" = $1"#)
             #expect(serialize(.expr(.column("foo"), .equal, .literal(1))) == #""foo" = 1"#)

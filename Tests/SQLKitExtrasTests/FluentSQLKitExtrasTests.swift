@@ -286,6 +286,53 @@ struct FluentSQLKitExtrasTests {
         }
 
         @Test
+        func betweenExpressionExtensions() {
+            let SB = { selectBuilder() }
+
+            #expect(serialize(.expr(\FooModel.$id, between: .literal(0), and: .literal(1))) == #""foos"."id" BETWEEN 0 AND 1"#)
+            #expect(serialize(.expr(\FooModel.$id, between: \FooModel.$id, and: .literal(1))) == #""foos"."id" BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(.expr(\FooModel.$id, between: .literal(0), and: \FooModel.$id)) == #""foos"."id" BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(.expr(.literal(0), between: \FooModel.$id, and: .literal(1))) == #"0 BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(.expr(.literal(0), between: .literal(0), and: \FooModel.$id)) == #"0 BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(.expr(.literal(0), between: \FooModel.$id, and: \FooModel.$id)) == #"0 BETWEEN "foos"."id" AND "foos"."id""#)
+            #expect(serialize(.expr(\FooModel.$id, between: \FooModel.$id, and: \FooModel.$id)) == #""foos"."id" BETWEEN "foos"."id" AND "foos"."id""#)
+
+            // N.B.: These are really extensions to SQLPredicateBuilder and SQLSecondaryPredicateBuilder. They're placed alongside
+            // the SQLBetween expression extensions anyway because they make a lot more sense being in their own file.
+            #expect(serialize(SB().where(.null()).where(\FooModel.$id, between: .literal(0), and: .literal(1))) == #"SELECT WHERE NULL AND "foos"."id" BETWEEN 0 AND 1"#)
+            #expect(serialize(SB().where(.null()).where(\FooModel.$id, between: \FooModel.$id, and: .literal(1))) == #"SELECT WHERE NULL AND "foos"."id" BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().where(.null()).where(\FooModel.$id, between: .literal(0), and: \FooModel.$id)) == #"SELECT WHERE NULL AND "foos"."id" BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().where(.null()).where(.literal(0), between: \FooModel.$id, and: .literal(1))) == #"SELECT WHERE NULL AND 0 BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().where(.null()).where(.literal(0), between: .literal(0), and: \FooModel.$id)) == #"SELECT WHERE NULL AND 0 BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().where(.null()).where(.literal(0), between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT WHERE NULL AND 0 BETWEEN "foos"."id" AND "foos"."id""#)
+            #expect(serialize(SB().where(.null()).where(\FooModel.$id, between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT WHERE NULL AND "foos"."id" BETWEEN "foos"."id" AND "foos"."id""#)
+
+            #expect(serialize(SB().orWhere(.null()).orWhere(\FooModel.$id, between: .literal(0), and: .literal(1))) == #"SELECT WHERE NULL OR "foos"."id" BETWEEN 0 AND 1"#)
+            #expect(serialize(SB().orWhere(.null()).orWhere(\FooModel.$id, between: \FooModel.$id, and: .literal(1))) == #"SELECT WHERE NULL OR "foos"."id" BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().orWhere(.null()).orWhere(\FooModel.$id, between: .literal(0), and: \FooModel.$id)) == #"SELECT WHERE NULL OR "foos"."id" BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().orWhere(.null()).orWhere(.literal(0), between: \FooModel.$id, and: .literal(1))) == #"SELECT WHERE NULL OR 0 BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().orWhere(.null()).orWhere(.literal(0), between: .literal(0), and: \FooModel.$id)) == #"SELECT WHERE NULL OR 0 BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().orWhere(.null()).orWhere(.literal(0), between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT WHERE NULL OR 0 BETWEEN "foos"."id" AND "foos"."id""#)
+            #expect(serialize(SB().orWhere(.null()).orWhere(\FooModel.$id, between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT WHERE NULL OR "foos"."id" BETWEEN "foos"."id" AND "foos"."id""#)
+
+            #expect(serialize(SB().having(.null()).having(\FooModel.$id, between: .literal(0), and: .literal(1))) == #"SELECT HAVING NULL AND "foos"."id" BETWEEN 0 AND 1"#)
+            #expect(serialize(SB().having(.null()).having(\FooModel.$id, between: \FooModel.$id, and: .literal(1))) == #"SELECT HAVING NULL AND "foos"."id" BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().having(.null()).having(\FooModel.$id, between: .literal(0), and: \FooModel.$id)) == #"SELECT HAVING NULL AND "foos"."id" BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().having(.null()).having(.literal(0), between: \FooModel.$id, and: .literal(1))) == #"SELECT HAVING NULL AND 0 BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().having(.null()).having(.literal(0), between: .literal(0), and: \FooModel.$id)) == #"SELECT HAVING NULL AND 0 BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().having(.null()).having(.literal(0), between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT HAVING NULL AND 0 BETWEEN "foos"."id" AND "foos"."id""#)
+            #expect(serialize(SB().having(.null()).having(\FooModel.$id, between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT HAVING NULL AND "foos"."id" BETWEEN "foos"."id" AND "foos"."id""#)
+
+            #expect(serialize(SB().orHaving(.null()).orHaving(\FooModel.$id, between: .literal(0), and: .literal(1))) == #"SELECT HAVING NULL OR "foos"."id" BETWEEN 0 AND 1"#)
+            #expect(serialize(SB().orHaving(.null()).orHaving(\FooModel.$id, between: \FooModel.$id, and: .literal(1))) == #"SELECT HAVING NULL OR "foos"."id" BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().orHaving(.null()).orHaving(\FooModel.$id, between: .literal(0), and: \FooModel.$id)) == #"SELECT HAVING NULL OR "foos"."id" BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().orHaving(.null()).orHaving(.literal(0), between: \FooModel.$id, and: .literal(1))) == #"SELECT HAVING NULL OR 0 BETWEEN "foos"."id" AND 1"#)
+            #expect(serialize(SB().orHaving(.null()).orHaving(.literal(0), between: .literal(0), and: \FooModel.$id)) == #"SELECT HAVING NULL OR 0 BETWEEN 0 AND "foos"."id""#)
+            #expect(serialize(SB().orHaving(.null()).orHaving(.literal(0), between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT HAVING NULL OR 0 BETWEEN "foos"."id" AND "foos"."id""#)
+            #expect(serialize(SB().orHaving(.null()).orHaving(\FooModel.$id, between: \FooModel.$id, and: \FooModel.$id)) == #"SELECT HAVING NULL OR "foos"."id" BETWEEN "foos"."id" AND "foos"."id""#)
+        }
+
+        @Test
         func binaryExpressionExtensions() {
             #expect(serialize(.expr(\FooModel.$field, .equal, \FooModel.$id)) == #""foos"."field" = "foos"."id""#)
             #expect(serialize(.expr(\FooModel.$field, .equal, .literal(""))) == #""foos"."field" = ''"#)
