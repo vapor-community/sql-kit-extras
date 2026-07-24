@@ -5,7 +5,7 @@ public import struct FoundationEssentials.Date
 public import struct Foundation.Date
 #endif
 
-extension Model {
+extension Fields {
     public typealias RequiredTimestamp<Format> = RequiredTimestampProperty<Self, Format>
         where
             Format: TimestampFormat
@@ -16,7 +16,7 @@ extension Model {
 @propertyWrapper
 public final class RequiredTimestampProperty<Model, Format>: SendableMetatype
     where
-        Model: FluentKit.Model,
+        Model: FluentKit.Fields,
         Format: TimestampFormat
 {
     @FieldProperty<Model, Format.Value>

@@ -25,6 +25,10 @@ struct FluentKitExtrasTests {
         #expect(model.group.blooey == "glooey")
         model.group.blooey = "flooey"
         #expect(model.blooey == "flooey")
+        model.mooey = Date(timeIntervalSince1970: 0)
+        #expect(model.mooey == Date(timeIntervalSince1970: 0))
+        model.group.mooey = Date(timeIntervalSince1970: 1)
+        #expect(model.mooey == Date(timeIntervalSince1970: 1))
     }
 
     @Test
@@ -33,16 +37,17 @@ struct FluentKitExtrasTests {
         model.group = .init()
 
         #expect(model.$group.description == "@BarModel.FlatGroup<BopFields>()")
-        #expect(model.$group.keys == [.string("phooey"), .string("blooey")])
+        #expect(model.$group.keys == [.string("phooey"), .string("blooey"), .string("mooey")])
 
         model.group.phooey = "phooey"
         model.group.blooey = "blooey"
+        model.group.mooey = Date(timeIntervalSince1970: 0)
 
         let input = QuickInput()
         model.$group.input(to: input)
 
         // The intent here is to test that @FlatGroup keeps its specified field keys intact, without @Group's prefixing.
-        #expect(input.content == ["phooey": "phooey", "blooey": "blooey"])
+        #expect(input.content == ["phooey": "phooey", "blooey": "blooey", "mooey": "1970-01-01 00:00:00 +0000"])
 
         #expect(throws: Never.self) { try model.$group.output(from: ["phooey": "phooey", "blooey": "blooey"] as QuickOutput) }
 
@@ -106,7 +111,7 @@ struct FluentKitExtrasTests {
         model.$bar.value = .init()
         #expect(model.bar.id == nil)
         #expect(model.$bar.description == model.$bar.name)
-        await #expect(throws: Never.self) { try await model.$bar.get(reload: true, on: MockFluentDatabase([[["id": "1", "identifier": "b", "timestamp": fluentIso8601String(), "another": fluentIso8601String(), "recursive_baridentifier": "b", "blooey": "", "phooey": ""] as QuickOutput]])) }
+        await #expect(throws: Never.self) { try await model.$bar.get(reload: true, on: MockFluentDatabase([[["id": "1", "identifier": "b", "timestamp": fluentIso8601String(), "another": fluentIso8601String(), "recursive_baridentifier": "b", "blooey": "", "phooey": "", "mooey": "1970-01-01T00:00:00Z"] as QuickOutput]])) }
         #expect(model.$bar.anyQueryableProperty === model.$bar.$ref)
         #expect(model.$bar.queryablePath == [.string("baridentifier")])
         #expect(model.$bar.queryableProperty === model.$bar.$ref)
@@ -187,6 +192,7 @@ struct FluentKitExtrasTests {
         model.another = .init()
         model.group.phooey = "phooey"
         model.group.blooey = "blooey"
+        model.group.mooey = Date(timeIntervalSince1970: 0)
         #expect(throws: Never.self) { try JSONEncoder().encode(model) }
         await #expect(throws: Never.self) { try await model.$bazs.get(reload: true, on: MockFluentDatabase()) }
         await #expect(throws: Never.self) { try await model.$bazs.create(BazModel(), on: MockFluentDatabase([[["id": "1"] as QuickOutput]])).get() }
@@ -245,6 +251,9 @@ final class BarModel: FluentKit.Model, @unchecked Sendable {
     @Alias(of: \.$group.$blooey)
     var blooey
 
+    @Alias(of: \.$group.$mooey)
+    var mooey
+
     @OptionalField(key: "miscellaneous")
     var miscellaneous: String?
 
@@ -302,6 +311,9 @@ final class BopFields: FluentKit.Fields, @unchecked Sendable {
 
     @Field(key: "blooey")
     var blooey: String
+
+    @RequiredTimestamp(key: "mooey")
+    var mooey: Date
 
     init() {}
 }
@@ -394,11 +406,11 @@ final class QuickInput: DatabaseInput {
 }
 
 func fluentIso8601Date(_ str: String) -> Date? {
-    TimestampFormatFactory<ISO8601TimestampFormat>.iso8601.makeFormat().parse(str)
+    try? Date(str, strategy: .iso8601)
 }
 
 func fluentIso8601String(_ date: Date = .init()) -> String {
-    TimestampFormatFactory<ISO8601TimestampFormat>.iso8601.makeFormat().serialize(date)!
+    date.formatted(.iso8601)
 }
 
 struct ModifiedStreamLogHandler: LogHandler {
