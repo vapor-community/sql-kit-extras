@@ -1,3 +1,4 @@
+#if FluentSQLKitExtras
 public import protocol SQLKit.SQLDatabase
 public import protocol FluentKit.Database
 public import protocol FluentKit.AsyncMigration
@@ -35,3 +36,4 @@ extension AsyncSQLMigration {
         try await self.revert(on: database as! any SQLDatabase)
     }
 }
+#endif
